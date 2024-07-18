@@ -1,0 +1,28 @@
+<!-- <pre>{{list$ | async | json}}</pre> -->
+<!-- 🔎✍❌⬅️➡️ -->
+@if (list$ | async; as list) {
+<h2>🗂️ Каталог: {{catalog.total()}} творів українською 🇺🇦, 📄 Сторінка: {{catalog.page()}}</h2>
+
+<section
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr)); gap: 2ch; padding: 3ch;">
+    @for (item of list.data; track $index) {
+    <article>
+        <img loading="lazy" [routerLink]="['/t/', item.id]"
+            [src]="'https://mangadex.org/covers/'+item.id+'/'+getCover(item.relationships).attributes?.fileName+'.512.jpg'"
+            alt="Cover {{getTitle(item.attributes)}}" />
+        <a [routerLink]="['/t/', item.id]">
+            <h3>{{getTitle(item.attributes)}}</h3>
+        </a>
+        <div class="tags" style="display: flex; gap: 1ch;">
+            <span>{{item.attributes.year}}</span>
+            <span [title]="item.attributes.status">{{statusMap.get(item.attributes.status)}}</span>
+            <span [title]="item.attributes.contentRating">{{contentRatingMap.get(item.attributes.contentRating)}}</span>
+        </div>
+
+        <!-- <p>{{item.attributes.description.uk ?? item.attributes.description.en ??
+            item.attributes.description[item.attributes.originalLanguage]}}</p> -->
+
+    </article>
+    }
+</section>
+}

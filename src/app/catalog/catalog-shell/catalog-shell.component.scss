@@ -1,0 +1,35 @@
+article {
+    display: grid;
+    gap: .1ch;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: #fff1;
+    padding-bottom: 1ch;
+    transition: all var(--t) ease-in-out;
+
+    &:hover {
+        transform: translateY(-1ch);
+    }
+}
+h2 {
+    padding: 0 2ch;
+    margin-bottom: 0;
+}
+
+h3 {
+    padding: 0 1ch;
+    margin: 0;
+}
+
+img {
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    width: 100%;
+}
+
+.tags {
+    padding: 0 1ch;
+    span {
+        font-size: small;
+    }
+}

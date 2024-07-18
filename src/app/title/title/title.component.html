@@ -1,0 +1,29 @@
+@if (title$ | async; as title) {
+<h2><a [routerLink]="'/'">🗂️ Каталог</a> {{getTitle(title.attributes)}}</h2>
+<!-- <pre>{{ | json}}</pre> -->
+<section style="display: grid; grid-template-columns: var(--min-card-width) 1fr; gap: 2ch; padding: 3ch;">
+    <aside>
+
+        <img loading="lazy"
+            [src]="'https://mangadex.org/covers/'+title.id+'/'+getCover(title.relationships).attributes?.fileName+'.512.jpg'"
+            alt="Cover {{getTitle(title.attributes)}}" />
+
+    </aside>
+    <section>
+        {{titleService.total()}}
+        @if (episodes$ | async; as episodes) {
+
+        <ul>@for (episode of episodes; track $index) {
+            <li><a [routerLink]="['/read/', episode.id]">vol.{{episode.attributes.volume}},
+                    ch.{{episode.attributes.chapter}} {{episode?.attributes?.title}} </a>
+                [
+                <a [href]="getScanlationGroup(episode.relationships)?.attributes.website ?? ''" target="_blank" rel="noopener noreferrer"> {{getScanlationGroup(episode.relationships)?.attributes.name}}</a>
+               ]
+            </li>
+            }
+        </ul>
+        }
+    </section>
+</section>
+
+}

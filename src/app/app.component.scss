@@ -1,0 +1,27 @@
+header {
+    background-color: #166496;
+    padding: 1ch;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 4ch 1fr;
+    gap: 1ch;
+}
+
+#logo {
+    display: block;
+    aspect-ratio: 1;
+    width: 100%;
+    filter: drop-shadow(2px 2px #c7daea);
+}
+
+.logo-text {
+    color: #ffd60a;
+    font-family: 'Rampart One';
+    margin: 0;
+    font-size: 2.5ch;
+}
+
+footer {
+    padding:  1ch;
+    font-size: small;
+}
