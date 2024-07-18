@@ -16,12 +16,12 @@ export class TitleService {
 
   getTitle(id: string): Observable<any> {
 
-    return this.http.get<any>(`https://api.mangadex.dev/manga/${id}?includes[]=cover_art`);
+    return this.http.get<any>(`https://proxy-seven-xi.vercel.app/api?url=https://api.mangadex.org/manga/${id}?includes[]=cover_art`);
   }
 
   getTitleEpisodes(id: string, lg: string = 'uk'): Observable<any> {
 
-    return this.http.get<any>(`https://api.mangadex.dev/manga/${id}/feed?translatedLanguage[]=${lg}&limit=${this.limit()}&offset=${this.offset()}&includes[]=scanlation_group&order[volume]=asc&order[chapter]=asc`);
+    return this.http.get<any>(`https://proxy-seven-xi.vercel.app/api?url=https://api.mangadex.org/manga/${id}/feed?translatedLanguage[]=${lg}&limit=${this.limit()}&offset=${this.offset()}&includes[]=scanlation_group&order[volume]=asc&order[chapter]=asc`);
   }
 }
 

@@ -23,6 +23,6 @@ export class CatalogService {
 
   getTitles(lg: string = 'uk'): Observable<any> {
 
-    return this.http.get<any>(`https://api.mangadex.dev/manga?limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&availableTranslatedLanguage[]=${lg}&includedTagsMode=AND&excludedTagsMode=OR`);
+    return this.http.get<any>(`https://proxy-seven-xi.vercel.app/api?url=https://api.mangadex.org/manga?limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&availableTranslatedLanguage[]=${lg}&includedTagsMode=AND&excludedTagsMode=OR`);
   }
 }

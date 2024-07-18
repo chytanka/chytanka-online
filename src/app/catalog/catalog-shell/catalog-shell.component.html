@@ -8,7 +8,7 @@
     @for (item of list.data; track $index) {
     <article>
         <img loading="lazy" [routerLink]="['/t/', item.id]"
-            [src]="'https://mangadex.org/covers/'+item.id+'/'+getCover(item.relationships).attributes?.fileName+'.512.jpg'"
+            [src]="'https://proxy-seven-xi.vercel.app/api?url=https://mangadex.org/covers/'+item.id+'/'+getCover(item.relationships).attributes?.fileName+'.512.jpg'"
             alt="Cover {{getTitle(item.attributes)}}" />
         <a [routerLink]="['/t/', item.id]">
             <h3>{{getTitle(item.attributes)}}</h3>
