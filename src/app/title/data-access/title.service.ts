@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ProxyService } from '../../shared/data-access/proxy.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +14,17 @@ export class TitleService {
   limit = signal(100)
 
   protected http: HttpClient = inject(HttpClient)
+  proxy: ProxyService = inject(ProxyService)
+
 
   getTitle(id: string): Observable<any> {
 
-    return this.http.get<any>(`https://proxy-seven-xi.vercel.app/api?url=https://api.mangadex.org/manga/${id}?includes[]=cover_art`);
+    return this.http.get<any>(this.proxy.proxyUrl(`https://api.mangadex.org/manga/${id}?includes[]=cover_art`));
   }
 
   getTitleEpisodes(id: string, lg: string = 'uk'): Observable<any> {
 
-    return this.http.get<any>(`https://proxy-seven-xi.vercel.app/api?url=https://api.mangadex.org/manga/${id}/feed?translatedLanguage[]=${lg}&limit=${this.limit()}&offset=${this.offset()}&includes[]=scanlation_group&order[volume]=asc&order[chapter]=asc`);
+    return this.http.get<any>(this.proxy.proxyUrl(`https://api.mangadex.org/manga/${id}/feed?translatedLanguage[]=${lg}&limit=${this.limit()}&offset=${this.offset()}&includes[]=scanlation_group&order[volume]=asc&order[chapter]=asc`));
   }
 }
 

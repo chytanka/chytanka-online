@@ -1,6 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ProxyService } from '../../shared/data-access/proxy.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +22,11 @@ export class CatalogService {
   //#endregion
 
   protected http: HttpClient = inject(HttpClient)
+  proxy: ProxyService = inject(ProxyService)
 
   getTitles(lg: string = 'uk'): Observable<any> {
+    const url = `https://api.mangadex.org/manga?limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&availableTranslatedLanguage[]=${lg}&includedTagsMode=AND&excludedTagsMode=OR`;
 
-    return this.http.get<any>(`https://proxy-seven-xi.vercel.app/api?url=https://api.mangadex.org/manga?limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&availableTranslatedLanguage[]=${lg}&includedTagsMode=AND&excludedTagsMode=OR`);
+    return this.http.get<any>(this.proxy.proxyUrl(url));
   }
 }
