@@ -1,17 +1,19 @@
 header {
-    background-color: #166496;
+    background-color: var(--avarage-color, #c3d3e3);
+    background-color: oklch(from var(--avarage-color, #c3d3e3) 40% c h);
     padding: 1ch;
     display: grid;
     align-items: center;
     grid-template-columns: 4ch 1fr;
     gap: 1ch;
+    transition: all var(--t) ease-in-out;
 }
 
 #logo {
     display: block;
     aspect-ratio: 1;
     width: 100%;
-    filter: drop-shadow(2px 2px #c7daea);
+    filter: drop-shadow(2px 2px #166496);
 }
 
 .logo-text {
@@ -24,4 +26,5 @@ header {
 footer {
     padding:  1ch;
     font-size: small;
+    text-align: center;
 }

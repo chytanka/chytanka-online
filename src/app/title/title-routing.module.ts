@@ -4,7 +4,7 @@ import { TitleComponent } from './title/title.component';
 
 const routes: Routes = [
   {
-    path: ':id',
+    path: '',
     component: TitleComponent
   },
 ];

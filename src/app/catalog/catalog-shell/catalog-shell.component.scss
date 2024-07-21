@@ -1,16 +1,52 @@
 article {
     display: grid;
-    gap: .1ch;
+    gap: 1ch;
     border-radius: var(--radius);
     overflow: hidden;
-    background-color: #fff1;
+    background-color: var(--avarage-color, #c3d3e3);
+    background-color: oklch(from var(--avarage-color, #c3d3e3) 82% c h);
     padding-bottom: 1ch;
     transition: all var(--t) ease-in-out;
+    --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
+    --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
+    box-shadow: .1ch .1ch var(--shc),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc2);
+    border: 1px solid var(--shc2);
+
+
+    --color: oklch(from var(--avarage-color, #c3d3e3) 42% c calc(h + 180));
+    --link-hover-color: oklch(from var(--avarage-color, #c3d3e3) 42% 0.16 calc(h + 180));
+    --y: 0ch;
+    --deg: 0deg;
+    color: var(--color);
+    transform: rotate(var(--deg)) translateY(var(--y));
+    
 
     &:hover {
-        transform: translateY(-1ch);
+        --deg: 0 !important;
+        --y: -1ch;
+
+        box-shadow: .1ch .1ch var(--shc2),
+            .2ch .2ch var(--shc),
+            .3ch .3ch var(--shc),
+            .4ch .4ch var(--shc),
+            .5ch .5ch var(--shc),
+            .6ch .6ch var(--shc),
+            .7ch .7ch var(--shc),
+            .8ch .8ch var(--shc),
+            .9ch .9ch var(--shc2),
     }
 }
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
 h2 {
     padding: 0 2ch;
     margin-bottom: 0;
@@ -19,6 +55,7 @@ h2 {
 h3 {
     padding: 0 1ch;
     margin: 0;
+    font-size: 1.08rem;
 }
 
 img {
@@ -29,7 +66,17 @@ img {
 
 .tags {
     padding: 0 1ch;
+
     span {
         font-size: small;
     }
+}
+
+.button {
+    line-height: 1;
+}
+
+.button.active {
+    display: block;
+    transform: translateY(-1ch);
 }

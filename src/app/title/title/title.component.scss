@@ -1,0 +1,47 @@
+:host {
+    --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
+    --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
+}
+
+.chtnk-frame {
+    width: 100%;
+    aspect-ratio: 3/2;
+    overflow: auto;
+    resize: vertical;
+    max-height: 90dvh;
+    padding-bottom: 1ch;
+    border: 1px solid var(--shc2);
+    border-radius: var(--radius);
+    box-shadow: .1ch .1ch var(--shc2),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc),
+        .4ch .4ch var(--shc),
+        .5ch .5ch var(--shc2);
+
+    @media ((orientation: portrait) and (max-aspect-ratio: 1)) or (max-width: 1024px) {
+        aspect-ratio: 2/3;
+    }
+}
+
+.episode-list {
+    display: grid;
+    gap: .5ch;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+        padding: .5ch 1ch;
+        box-shadow: .1ch .1ch var(--shc2),
+            .2ch .2ch var(--shc);
+        border-radius: .5ch;
+
+
+        display: grid;
+        grid-template-columns: 1fr auto;
+
+        &.active {
+            background-color: oklch(from var(--avarage-color, #c3d3e3) 40% c h);
+        }
+    }
+}

@@ -1,29 +1,67 @@
 @if (title$ | async; as title) {
-<h2><a [routerLink]="'/'">🗂️ Каталог</a> {{getTitle(title.attributes)}}</h2>
+<!-- <h2><a [routerLink]="'/'">🗂️ Каталог</a> {{getTitle(title.attributes)}}</h2> -->
 <!-- <pre>{{ | json}}</pre> -->
-<section style="display: grid; grid-template-columns: var(--min-card-width) 1fr; gap: 2ch; padding: 3ch;">
-    <aside>
+<section style="display: grid; grid-template-columns: 61.8fr 38.2fr; gap: 2ch; padding: 3ch;">
 
-        <img loading="lazy"
-            [src]="titleService.proxy.proxyUrl('https://mangadex.org/covers/'+title.id+'/'+getCover(title.relationships).attributes?.fileName+'.512.jpg')"
-            alt="Cover {{getTitle(title.attributes)}}" />
-
-    </aside>
     <section>
-        {{titleService.total()}}
+        @if(currentId()){<iframe class="chtnk-frame"
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.github.io/mangadex/'+currentId()+'?lang=uk')"
+            frameborder="0" allowfullscreen title="Chytanka"></iframe>}
+
+        <p>
+            @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track $index) {
+            <a href="{{getLink(siteId, title.attributes.links[siteId] )?.template}}" target="_blank"
+                rel="noopener noreferrer">{{getLink(siteId, '')?.name}}</a>
+            }
+        </p>
+
+        <p>{{title.attributes.description.uk ?? title.attributes.description.en ??
+            title.attributes.description[title.attributes.originalLanguage]}}</p>
+    </section>
+
+    <aside>
+        <figure style="margin: 0; aspect-ratio: 3/2; overflow: hidden; position: relative;box-shadow: .1ch .1ch var(--shc),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc2); border-radius: .5ch; 
+        
+    border: 1px solid var(--shc2);
+    ">
+            <div style="
+            position: absolute;
+            aspect-ratio: 1;
+            
+            width: 100%;
+            top: 50%;
+            transform-origin: center;
+            transform: translateY(-50%) rotate(-90deg); ">
+
+
+                <img style=" position: absolute; object-fit: cover; margin: auto; aspect-ratio: 2/3; inset: 0;
+                max-height: 100%;" loading="lazy"
+                    [src]="titleService.proxy.proxyUrl('https://mangadex.org/covers/'+title.id+'/'+getCover(title.relationships).attributes?.fileName+'.512.jpg')"
+                    alt="Cover {{getTitle(title.attributes)}}" crossOrigin="anonymous"
+                    (load)="averageColor($event, document)" />
+            </div>
+
+        </figure>
+
+        <h2 style="color: var(--shc);">{{getTitle(title.attributes)}}</h2>
+
         @if (episodes$ | async; as episodes) {
 
-        <ul>@for (episode of episodes; track $index) {
-            <li><a [routerLink]="['/read/', episode.id]">vol.{{episode.attributes.volume}},
+        <ul class="episode-list">@for (episode of episodes; track $index) {
+            <li [ngClass]="{active: episode.id == currentId()}"><a  (click)="currentId.set(episode.id)">vol.{{episode.attributes.volume}},
                     ch.{{episode.attributes.chapter}} {{episode?.attributes?.title}} </a>
-                [
-                <a [href]="getScanlationGroup(episode.relationships)?.attributes.website ?? ''" target="_blank" rel="noopener noreferrer"> {{getScanlationGroup(episode.relationships)?.attributes.name}}</a>
-               ]
+                
+                <small><a [href]="getScanlationGroup(episode.relationships)?.attributes.website ?? ''" target="_blank"
+                    rel="noopener noreferrer"> {{getScanlationGroup(episode.relationships)?.attributes.name}}</a></small>
+                
             </li>
             }
         </ul>
         }
-    </section>
+
+    </aside>
 </section>
 
 }

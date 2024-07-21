@@ -1,28 +1,57 @@
 <!-- <pre>{{list$ | async | json}}</pre> -->
 <!-- 🔎✍❌⬅️➡️ -->
+@if (error$ | async) {
+error
+}
+@if(loading$ | async) {
+<loading />
+} 
+
+
+
 @if (list$ | async; as list) {
-<h2>🗂️ Каталог: {{catalog.total()}} творів українською 🇺🇦, 📄 Сторінка: {{catalog.page()}}</h2>
+<h2>🗂️ Знайдено {{catalog.total()}} тайтлів з 🇺🇦 перекладом</h2>
+
+<!-- <form action="/">
+<input type="search" name="q">
+<input type="hidden" name="page" value="1">
+</form> -->
 
 <section
     style="display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr)); gap: 2ch; padding: 3ch;">
     @for (item of list.data; track $index) {
-    <article>
-        <img loading="lazy" [routerLink]="['/t/', item.id]"
+    <article #article [style]="{'--deg': item.deg+'deg'}">
+        <img loading="lazy" [routerLink]="['/', item.id]"
             [src]="'https://proxy-seven-xi.vercel.app/api?url=https://mangadex.org/covers/'+item.id+'/'+getCover(item.relationships).attributes?.fileName+'.512.jpg'"
-            alt="Cover {{getTitle(item.attributes)}}" />
-        <a [routerLink]="['/t/', item.id]">
-            <h3>{{getTitle(item.attributes)}}</h3>
+            alt="Cover {{getTitle(item.attributes)}}" (load)="averageColor($event, article)" crossOrigin="anonymous" />
+        <a [routerLink]="['/', item.id]" style="line-break: anywhere;">
+            <h3>
+                <span [title]="item.attributes.status">{{statusMap.get(item.attributes.status)}}</span>
+                <span
+                    [title]="item.attributes.contentRating">{{contentRatingMap.get(item.attributes.contentRating)}}</span>
+                {{getTitle(item.attributes)}}
+            </h3>
         </a>
-        <div class="tags" style="display: flex; gap: 1ch;">
-            <span>{{item.attributes.year}}</span>
-            <span [title]="item.attributes.status">{{statusMap.get(item.attributes.status)}}</span>
-            <span [title]="item.attributes.contentRating">{{contentRatingMap.get(item.attributes.contentRating)}}</span>
-        </div>
-
-        <!-- <p>{{item.attributes.description.uk ?? item.attributes.description.en ??
-            item.attributes.description[item.attributes.originalLanguage]}}</p> -->
-
     </article>
     }
+
 </section>
+
+<div style="text-align: center;">
+    📄
+
+    <ul style="display: inline-flex; margin: 0;
+    padding: 0; gap: 1ch; list-style: none; align-items: center;">
+        @for (item of catalog.getPaginationPages(catalog.total(), catalog.page(), catalog.limit()); track $index) {
+        @if(item != -1){
+        <li><a [ngClass]="{active: catalog.page() == item, disabled: catalog.page() == item}" class="button small"
+                [routerLink]="'/'" [queryParams]="{page: item}">{{item}}</a></li>}
+        @else {
+        <separator />
+        }
+        }
+    </ul>
+</div>
+
+
 }

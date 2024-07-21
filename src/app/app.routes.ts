@@ -6,11 +6,7 @@ export const routes: Routes = [
         loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)
     },
     {
-        path: 't',
+        path: ':id',
         loadChildren: () => import('./title/title.module').then(m => m.TitleModule)
-    },
-    {
-        path: 'read',
-        loadChildren: () => import('./read/read.module').then(m => m.ReadModule)
     }
 ];
