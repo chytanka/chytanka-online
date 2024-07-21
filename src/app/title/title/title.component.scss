@@ -1,6 +1,16 @@
 :host {
     --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
     --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
+
+    display: grid;
+    grid-template-columns: 61.8fr 38.2fr;
+    gap: 2ch;
+    padding: 2ch;
+
+    @media (max-width: 800px) {
+        grid-template-columns: 1fr;
+
+    }
 }
 
 .chtnk-frame {
@@ -21,11 +31,14 @@
     @media ((orientation: portrait) and (max-aspect-ratio: 1)) or (max-width: 1024px) {
         aspect-ratio: 2/3;
     }
+    @media (max-width: 800px) {
+        max-height: 80vh;
+    }
 }
 
 .episode-list {
     display: grid;
-    gap: .5ch;
+    gap: 1ch;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -39,9 +52,19 @@
 
         display: grid;
         grid-template-columns: 1fr auto;
+        gap: 1ch;
 
         &.active {
             background-color: oklch(from var(--avarage-color, #c3d3e3) 40% c h);
         }
+    }
+}
+
+aside {
+    display: flex;
+    flex-direction: column;
+    gap: 2ch;
+    h2 {
+        margin-bottom: 0;
     }
 }
