@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, finalize, map, MonoTypeOperatorFunction, Observable, of, OperatorFunction, pipe, switchMap, tap } from 'rxjs';
 import { CatalogService } from '../data-access/catalog.service';
-import { getAverageColor } from '../../shared/util/average-color';
+import { getAverageColor } from '../../shared/utils/average-color';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { MangadexHelper } from '../../shared/utils';
 
 @Component({
   selector: 'chtnk-catalog-shell',
@@ -10,6 +12,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
   styleUrl: './catalog-shell.component.scss'
 })
 export class CatalogShellComponent {
+  MangadexHelper = MangadexHelper
 
   protected refresh$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   error$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
@@ -27,6 +30,7 @@ export class CatalogShellComponent {
   contentRatingMap = new Map<string, string>()
 
   catalog: CatalogService = inject(CatalogService);
+  title: Title = inject(Title);
   protected route: ActivatedRoute = inject(ActivatedRoute)
 
   list$ = this.combineQueryParamsAndRefresh()
@@ -44,21 +48,26 @@ export class CatalogShellComponent {
         return data$.pipe(
           map(res => res),
           this.catchError(),
-          tap(v=> v.data.forEach((el: any) => {
+          tap(v => v.data.forEach((el: any) => {
             el.deg = this.getRandomDeg()
           })),
           tap(v => this.catalog.total.set(v.total)),
+          tap(v => this.title.setTitle(`Читанка Онлайн — більше ${this.roundToNearest(v.total)} тайтлів українською`)),
           this.finalizeLoading()
         )
       })
     )
 
-  getCover(relationships: any[]): any {
-    return relationships.filter((r: any) => r.type == 'cover_art')[0] ?? null
-  }
+  // getCover(relationships: any[]): any {
+  //   return relationships.filter((r: any) => r.type == 'cover_art')[0] ?? null
+  // }
 
-  getTitle(attributes: any): any {
-    return attributes?.altTitles?.filter((alt: any) => alt?.uk)[0]?.uk ?? attributes?.title.en ?? attributes?.title[attributes?.originalLanguage]
+  // getTitle(attributes: any): any {
+  //   return attributes?.altTitles?.filter((alt: any) => alt?.uk)[0]?.uk ?? attributes?.title.en ?? attributes?.title[attributes?.originalLanguage]
+  // }
+
+  roundToNearest(num: number, nearest = 50) {
+    return Math.round(num / nearest) * nearest;
   }
 
   initStatusMap() {
@@ -73,9 +82,9 @@ export class CatalogShellComponent {
     this.contentRatingMap.set('pornographic', '🔞')
   }
 
-  getRandomDeg(min: number = -1, max: number =1) {
+  getRandomDeg(min: number = -1, max: number = 1) {
     return (Math.random() * (max - min) + min);
-}
+  }
 
   averageColor(event: Event, element: HTMLElement) {
     const img = event.target as HTMLImageElement

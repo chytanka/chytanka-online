@@ -1,0 +1,36 @@
+:host {
+    --aspect-ratio: 3/2;
+    --inverse-aspect-ratio: calc(1 / (var(--aspect-ratio)));
+    margin: 0;
+    aspect-ratio: var(--aspect-ratio);
+    overflow: hidden;
+    position: relative;
+    border-radius: .5ch;
+    border: 1px solid var(--shc2);
+    box-shadow: .1ch .1ch var(--shc),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc2);
+    // transition: all var(--t) ease-in-out;
+    // &:hover {
+    //     --aspect-ratio: 3/2;
+    // }
+}
+
+div {
+    position: absolute;
+    aspect-ratio: 1;
+    width: 100%;
+    top: 50%;
+    transform-origin: center;
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+img {
+    position: absolute;
+    object-fit: cover;
+    margin: auto;
+    aspect-ratio: var(--inverse-aspect-ratio);
+    inset: 0;
+    max-height: 100%;
+    height: 100%;
+}

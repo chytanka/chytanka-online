@@ -80,3 +80,9 @@ img {
     display: block;
     transform: translateY(-1ch);
 }
+section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr));
+    gap: 2ch;
+    padding: 3ch;
+}

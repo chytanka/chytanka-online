@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
 import { TitleService } from '../data-access/title.service';
 import { map, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { getAverageColor } from '../../shared/util/average-color';
+import { DomSanitizer, Title } from '@angular/platform-browser';
+import { getAverageColor } from '../../shared/utils/average-color';
+import { MangadexHelper } from '../../shared/utils';
 
 @Component({
   selector: 'app-title',
@@ -12,31 +13,30 @@ import { getAverageColor } from '../../shared/util/average-color';
 })
 export class TitleComponent {
   Object = Object;
+  MangadexHelper = MangadexHelper
+
   document = document.documentElement;
   titleService: TitleService = inject(TitleService);
   protected route: ActivatedRoute = inject(ActivatedRoute)
+  title = inject(Title)
   sanitizer = inject(DomSanitizer)
 
   activeIndex = signal(0)
 
-  title$ = this.titleService.getTitle(this.route.snapshot.params['id']).pipe(map(res => res.data))
+  title$ = this.titleService.getTitle(this.route.snapshot.params['id']).pipe(
+    map(res => res.data),
+    tap((v) => {
+      const t = MangadexHelper.getTitle(v.attributes)
+      this.title.setTitle(`Читати ${t} в Читанці онлайн`)
+    }
+    )
+  )
+
   episodes$ = this.titleService.getTitleEpisodes(this.route.snapshot.params['id']).pipe(tap(v => this.titleService.total.set(v.total)), map(res => res.data), tap(v => this.currentId.set(v[this.activeIndex()].id)), tap(v => this.listBlobUrl = this.playListUrl(v)
   ))
 
   currentId = signal('')
   listBlobUrl = '';
-
-  getCover(relationships: any[]): any {
-    return relationships?.filter((r: any) => r.type == 'cover_art')[0] ?? null
-  }
-
-  getTitle(attributes: any): any {
-    return attributes?.altTitles?.filter((alt: any) => alt?.uk)[0]?.uk ?? attributes?.title.en ?? attributes?.title[attributes?.originalLanguage]
-  }
-
-  getScanlationGroup(relationships: any[]): any {
-    return relationships?.filter((r: any) => r.type == 'scanlation_group')[0] ?? null
-  }
 
   averageColor(event: Event, element: HTMLElement) {
     const img = event.target as HTMLImageElement

@@ -4,7 +4,7 @@
 
     display: grid;
     grid-template-columns: 61.8fr 38.2fr;
-    gap: 2ch;
+    gap: 2ch 3ch;
     padding: 2ch;
 
     @media (max-width: 800px) {
@@ -18,7 +18,7 @@
     aspect-ratio: 3/2;
     overflow: auto;
     resize: vertical;
-    max-height: 90dvh;
+    max-height: 80dvh;
     padding-bottom: 1ch;
     border: 1px solid var(--shc2);
     border-radius: var(--radius);
@@ -31,9 +31,9 @@
     @media ((orientation: portrait) and (max-aspect-ratio: 1)) or (max-width: 1024px) {
         aspect-ratio: 2/3;
     }
-    @media (max-width: 800px) {
-        max-height: 80vh;
-    }
+    // @media (max-width: 800px) {
+    //     max-height: 80vh;
+    // }
 }
 
 .episode-list {
@@ -42,13 +42,15 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    overflow: auto;
+    align-content: baseline;
 
     li {
         padding: .5ch 1ch;
         box-shadow: .1ch .1ch var(--shc2),
             .2ch .2ch var(--shc);
         border-radius: .5ch;
-
+        font-size: small;
 
         display: grid;
         grid-template-columns: 1fr auto;
@@ -61,10 +63,11 @@
 }
 
 aside {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    max-height: calc(100vh - (60px + 4ch));
     gap: 2ch;
     h2 {
-        margin-bottom: 0;
+        margin: 0;
     }
 }

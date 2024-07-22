@@ -3,6 +3,9 @@
 :root {
     --radius: 1ch;
     --min-card-width: 192px;
+    @media (max-width: 800px) {
+        --min-card-width: 128px;
+    }
     --blur: 1ch;
     --t: 133.333334ms; //266.666667ms; //calc(1s / 60 * 16);
     --surface: hsl(203.44 8% 16%);

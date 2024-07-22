@@ -7,13 +7,27 @@ header {
     grid-template-columns: 4ch 1fr;
     gap: 1ch;
     transition: all var(--t) ease-in-out;
+
+    // margin: 1ch;
+    // margin-top: 0;
+    // position: sticky;
+    // top: 0;
+    // z-index: 1;
+    // border-radius: var(--radius);
+    // --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
+    // --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
+    // box-shadow: .1ch .1ch var(--shc2),
+    //     .2ch .2ch var(--shc),
+    //     .3ch .3ch var(--shc),
+    //     .4ch .4ch var(--shc),
+    //     .5ch .5ch var(--shc2);
 }
 
 #logo {
     display: block;
     aspect-ratio: 1;
     width: 100%;
-    filter: drop-shadow(2px 2px #166496);
+    filter: drop-shadow(2px 2px var(--shc));
 }
 
 .logo-text {
@@ -21,10 +35,14 @@ header {
     font-family: 'Rampart One';
     margin: 0;
     font-size: 2.5ch;
+
+    @media (max-width: 800px) {
+        display: none;
+    }
 }
 
 footer {
-    padding:  1ch;
+    padding: 1ch;
     font-size: small;
     text-align: center;
 }
