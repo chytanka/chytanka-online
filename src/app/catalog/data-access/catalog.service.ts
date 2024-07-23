@@ -51,7 +51,7 @@ export class CatalogService {
 
   //#endregion
 
-  protected http: HttpClient = inject(HttpClient)
+  http: HttpClient = inject(HttpClient)
   proxy: ProxyService = inject(ProxyService)
 
   getTranslateTitles(q: string = '', lg: string = 'uk'): Observable<any> {

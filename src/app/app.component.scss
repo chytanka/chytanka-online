@@ -7,20 +7,6 @@ header {
     grid-template-columns: 4ch 1fr;
     gap: 1ch;
     transition: all var(--t) ease-in-out;
-
-    // margin: 1ch;
-    // margin-top: 0;
-    // position: sticky;
-    // top: 0;
-    // z-index: 1;
-    // border-radius: var(--radius);
-    // --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
-    // --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
-    // box-shadow: .1ch .1ch var(--shc2),
-    //     .2ch .2ch var(--shc),
-    //     .3ch .3ch var(--shc),
-    //     .4ch .4ch var(--shc),
-    //     .5ch .5ch var(--shc2);
 }
 
 #logo {
@@ -32,9 +18,29 @@ header {
 
 .logo-text {
     color: #ffd60a;
-    font-family: 'Rampart One';
+    font-family: 'Troubleside';
+    font-size-adjust: from-font;
     margin: 0;
     font-size: 2.5ch;
+    line-height: 1;
+    padding-top: .25ch;
+
+    sub, sup {
+        position: relative;
+        font-size-adjust: unset;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: .64rem;
+        left: .25ch;
+        
+    }
+    sup {
+        color: #b0ee64;
+        left: -.65ch;
+    }
+    sub {
+        // font-weight: 400;
+        opacity: .64;
+    }
 
     @media (max-width: 800px) {
         display: none;

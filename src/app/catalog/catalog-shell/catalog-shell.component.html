@@ -9,7 +9,7 @@ error
 
 
 
-@if (list$ | async; as list) {
+@if (list$ | async; as list) { @if(!(loading$ | async)){
 <h2>🗂️ Знайдено {{catalog.total()}} тайтлів з 🇺🇦 перекладом</h2>
 
 <!-- <form action="/">
@@ -21,13 +21,14 @@ error
     @for (item of list.data; track $index) {
     <article #article [style]="{'--deg': item.deg+'deg'}">
         <img loading="lazy" [routerLink]="['/', item.id]"
-            [src]="'https://proxy-seven-xi.vercel.app/api?url=https://mangadex.org/covers/'+item.id+'/'+MangadexHelper.getCover(item.relationships).attributes?.fileName+'.512.jpg'"
-            alt="Cover {{MangadexHelper.getTitle(item.attributes)}}" (load)="averageColor($event, article)" crossOrigin="anonymous" />
+            [src]="catalog.proxy.proxyUrl('https://mangadex.org/covers/'+item.id+'/'+MangadexHelper.getCover(item.relationships).attributes?.fileName+'.512.jpg')"
+            alt="Cover {{MangadexHelper.getTitle(item.attributes)}}" (load)="averageColor($event, article)"
+            crossOrigin="anonymous" />
         <a [routerLink]="['/', item.id]" style="line-break: loose;">
             <h3>
-                <span [title]="item.attributes.status">{{statusMap.get(item.attributes.status)}}</span>
+                <span [title]="item.attributes.status">{{MangadexHelper.statusMap.get(item.attributes.status)}}</span>
                 <span
-                    [title]="item.attributes.contentRating">{{contentRatingMap.get(item.attributes.contentRating)}}</span>
+                    [title]="item.attributes.contentRating">{{MangadexHelper.contentRatingMap.get(item.attributes.contentRating)}}</span>
                 {{MangadexHelper.getTitle(item.attributes)}}
             </h3>
         </a>
@@ -39,7 +40,7 @@ error
 <div style="text-align: center;">
     📄
 
-    <ul style="display: inline-flex; margin: 0;
+    <ul style="display: inline-flex; margin: 0; font-family: 'Troubleside';
     padding: 0; gap: 1ch; list-style: none; align-items: center;">
         @for (item of catalog.getPaginationPages(catalog.total(), catalog.page(), catalog.limit()); track $index) {
         @if(item != -1){
@@ -51,6 +52,4 @@ error
         }
     </ul>
 </div>
-
-
-}
+}}

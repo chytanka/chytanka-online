@@ -48,8 +48,7 @@ export class TitleComponent implements OnInit {
     )
   )
 
-  episodes$ = this.titleService.getTitleEpisodes(this.route.snapshot.params['id']).pipe(tap(v => this.titleService.total.set(v.total)), map(res => res.data), tap(v => this.currentId.set(v[this.activeIndex()].id)), tap(v => this.listBlobUrl = this.playListUrl(v)
-  ))
+  episodes$ = this.titleService.getTitleEpisodes(this.route.snapshot.params['id']).pipe(tap(v => this.titleService.total.set(v.total)), map(res => res.data), tap(v => this.currentId.set(v[this.activeIndex()].id)))
 
   currentId = signal('')
   listBlobUrl = '';
@@ -65,48 +64,36 @@ export class TitleComponent implements OnInit {
     element.style.setProperty('--avarage-color', avc)
   }
 
-  siteTemplates = new Map<string, { name: string, template: string }>()
-    .set("al", { name: 'anilist', template: `https://anilist.co/manga/{{value}}` })
-    .set("ap", { name: 'animeplanet', template: `https://www.anime-planet.com/manga/{{value}}` })
-    .set("bw", { name: 'bookwalker.jp', template: `https://bookwalker.jp/{{value}}` })
-    .set("mu", { name: 'mangaupdates', template: `https://www.mangaupdates.com/series.html?id={{value}}` })
-    .set("nu", { name: 'novelupdates', template: `https://www.novelupdates.com/series/{{value}}` })
-    .set("kt", { name: 'kitsu.io', template: `https://kitsu.io/api/edge/manga/{{value}}` })
-    .set("amz", { name: 'amazon', template: `{{value}}` })
-    .set("ebj", { name: 'ebookjapan', template: `{{value}}` })
-    .set("mal", { name: 'myanimelist', template: `https://myanimelist.net/manga/{{value}}` })
-    .set("cdj", { name: 'CDJapan', template: `{{value}}` })
-    .set("raw", { name: 'RAW', template: `{{value}}` })
-    .set("engtl", { name: 'English', template: `{{value}}` })
+  // jsonToBlobURL(obj: any) {
+  //   const str = JSON.stringify(obj);
+  //   const bytes = new TextEncoder().encode(str);
+  //   const blob = new Blob([bytes], {
+  //     type: "application/json;charset=utf-8"
+  //   });
 
+  //   return URL.createObjectURL(blob)
+  // }
 
-  getLink(id: string, value: string) {
-    const res = this.siteTemplates.get(id);
-    if (!res) return null
+  // playListUrl(mangadexList: any) {
+  //   const res: any[] = []
 
-    return {
-      name: res.name,
-      template: res.template.replace('{{value}}', value)
-    }
-  }
+  //   mangadexList.forEach((item: any) => {
+  //     res.push(`https://mangadex.org/chapter/${item.id}`)
+  //   });
 
-  jsonToBlobURL(obj: any) {
-    const str = JSON.stringify(obj);
-    const bytes = new TextEncoder().encode(str);
-    const blob = new Blob([bytes], {
-      type: "application/json;charset=utf-8"
-    });
+  //   return this.jsonToBlobURL(res)
+  // }
 
-    return URL.createObjectURL(blob)
-  }
+  parseMarkdown(markdown: string): string {
+    // Замінюємо нові рядки на HTML-теги <p> для абзаців
+    let html = markdown
+        .split('\n\n') // Розбиваємо текст на абзаци
+        .map(paragraph => `<p>${paragraph.replace(/\n/g, ' ')}</p>`) // Заміна нових рядків в абзацах на пробіли
+        .join('\n'); // Об'єднуємо абзаци назад в один рядок
 
-  playListUrl(mangadexList: any) {
-    const res: any[] = []
+    // Замінюємо Markdown посилання на HTML
+    html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 
-    mangadexList.forEach((item: any) => {
-      res.push(`https://mangadex.org/chapter/${item.id}`)
-    });
-
-    return this.jsonToBlobURL(res)
-  }
+    return html;
+}
 }

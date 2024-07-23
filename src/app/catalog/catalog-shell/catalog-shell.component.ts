@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, finalize, map, MonoTypeOperatorFunction, Observable, of, OperatorFunction, pipe, switchMap, tap } from 'rxjs';
 import { CatalogService } from '../data-access/catalog.service';
 import { getAverageColor } from '../../shared/utils/average-color';
@@ -22,12 +22,7 @@ export class CatalogShellComponent {
    *
    */
   constructor() {
-    this.initStatusMap();
-    this.initContentRatingMap();
   }
-
-  statusMap = new Map<string, string>()
-  contentRatingMap = new Map<string, string>()
 
   catalog: CatalogService = inject(CatalogService);
   title: Title = inject(Title);
@@ -47,53 +42,17 @@ export class CatalogShellComponent {
         const data$ = this.catalog.getTranslateTitles(q);
 
         return data$.pipe(
-          map(res => res),
           this.catchError(),
-          tap(v => v.data.forEach((el: any) => {
-            el.deg = this.getRandomDeg()
-          })),
-          tap(v => this.catalog.total.set(v.total)),
-          tap(v => {
-            const metaTitle = `Читанка Онлайн — більше ${this.roundToNearest(v.total)} тайтлів українською`
-            this.title.setTitle(metaTitle)
-
-            this.meta.updateTag({
-              name: 'title',
-              content: metaTitle
-            })
-
-            this.meta.updateTag({
-              name: 'description',
-              content: `Читати манґу українською онлайн. Не найбільша колекція перекладів манги українською, але все ж... вже більше ${this.roundToNearest(v.total)} тайтлів українською`
-            })
-          }),
+          this.tapSetTotalPages(),
+          this.tapSetMetaTags(),
+          this.tapSetRandomDeg(),
           this.finalizeLoading()
         )
       })
     )
 
-  // getCover(relationships: any[]): any {
-  //   return relationships.filter((r: any) => r.type == 'cover_art')[0] ?? null
-  // }
-
-  // getTitle(attributes: any): any {
-  //   return attributes?.altTitles?.filter((alt: any) => alt?.uk)[0]?.uk ?? attributes?.title.en ?? attributes?.title[attributes?.originalLanguage]
-  // }
-
   roundToNearest(num: number, nearest = 50) {
     return Math.round(num / nearest) * nearest;
-  }
-
-  initStatusMap() {
-    this.statusMap.set('ongoing', '📝')
-    this.statusMap.set('completed', '✅')
-  }
-
-  initContentRatingMap() {
-    this.contentRatingMap.set('safe', '🎈')
-    this.contentRatingMap.set('suggestive', '😏')
-    this.contentRatingMap.set('erotica', '👙')
-    this.contentRatingMap.set('pornographic', '🔞')
   }
 
   getRandomDeg(min: number = -1, max: number = 1) {
@@ -125,6 +84,24 @@ export class CatalogShellComponent {
     })
   }
 
+  protected tapSetMetaTags(): MonoTypeOperatorFunction<any> {
+    return tap((v: any) => {
+      const metaTitle = `Читанка Онлайн — більше ${this.roundToNearest(v.total)} тайтлів українською`
+      const metaDesc = `Читати манґу українською онлайн. Не найбільша колекція перекладів манги українською, але все ж... вже більше ${this.roundToNearest(v.total)} тайтлів українською`;
+
+      this.title.setTitle(metaTitle)
+      this.meta.updateTag({ name: 'title', content: metaTitle })
+      this.meta.updateTag({ name: 'description', content: metaDesc })
+    })
+  }
+
+  protected tapSetRandomDeg(): MonoTypeOperatorFunction<any> {
+    return tap(v => v.data.forEach((el: any) => {
+      if (!el.deg) el.deg = this.getRandomDeg()
+    }))
+  }
+
+  protected tapSetTotalPages = (): MonoTypeOperatorFunction<any> => tap(v => this.catalog.total.set(v.total));
 
   protected finalizeLoading(): MonoTypeOperatorFunction<any> {
     return finalize(() => this.loading$.next(false))
@@ -132,7 +109,7 @@ export class CatalogShellComponent {
 
   protected catchError(): OperatorFunction<any, any> {
     return catchError(() => {
-      this.error$.next('this.lang.ph().dataLoadErr');
+      this.error$.next('Помилка завантаження дпних. Спробуйте оновити сторінку');
       return of(null);
     })
   }

@@ -8,35 +8,42 @@
     <p>
         <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
         @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track $index) {
-        <a href="{{getLink(siteId, title.attributes.links[siteId] )?.template}}" target="_blank"
-            rel="noopener noreferrer">{{getLink(siteId, '')?.name}}</a>
+        <a href="{{MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template}}" target="_blank"
+            rel="noopener noreferrer">{{MangadexHelper.getLink(siteId, '')?.name}}</a>
         }
     </p>
 
-    <p>{{MangadexHelper.desc(title.attributes)}}</p>
+    <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
 
     <p style="display: flex; flex-wrap: wrap; gap: 1ch;">
         @for (genre of MangadexHelper.genreTags(title.attributes.tags); track $index) {
-            <a [routerLink]="['/']" [queryParams]="{genre: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        <a [routerLink]="['/']" [queryParams]="{genre: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
         }
- 
+
         @for (genre of MangadexHelper.themeTags(title.attributes.tags); track $index) {
-            <a [routerLink]="['/']" [queryParams]="{theme: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        <a [routerLink]="['/']" [queryParams]="{theme: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
         }
 
         @for (genre of MangadexHelper.contentTags(title.attributes.tags); track $index) {
-            <a [routerLink]="['/']" [queryParams]="{content: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        <a [routerLink]="['/']" [queryParams]="{content: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
         }
- 
+
         @for (genre of MangadexHelper.formatTags(title.attributes.tags); track $index) {
-            <a [routerLink]="['/']" [queryParams]="{format: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        <a [routerLink]="['/']" [queryParams]="{format: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
         }
     </p>
 </div>
 
 <aside>
 
-    <h2 style="color: var(--shc);">{{MangadexHelper.getTitle(title.attributes)}}</h2>
+    <h2 style="color: var(--shc);">
+
+        <span [title]="title.attributes.status">{{MangadexHelper.statusMap.get(title.attributes.status)}}</span>
+        <span
+            [title]="title.attributes.contentRating">{{MangadexHelper.contentRatingMap.get(title.attributes.contentRating)}}</span>
+
+        {{MangadexHelper.getTitle(title.attributes)}}
+    </h2>
 
     @if (episodes$ | async; as episodes) {
 
@@ -46,9 +53,10 @@
                 <span title="Том">т.{{episode.attributes.volume}} </span> }
                 @if(episode.attributes.chapter){
                 <span title="Розділ">р.{{episode.attributes.chapter}} </span> }
-                <span>{{episode?.attributes?.title}}</span> </a>
+                <span>{{episode?.attributes?.title ?? 'Без назви'}}</span> </a>
 
-            <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date : 'medium'}}</data> <a
+            <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date :
+                    'medium'}}</data> <a
                     [href]="MangadexHelper.getScanlationGroup(episode.relationships)?.attributes.website ?? ''"
                     target="_blank" rel="noopener noreferrer">
                     {{MangadexHelper.getScanlationGroup(episode.relationships)?.attributes.name}}</a></small>

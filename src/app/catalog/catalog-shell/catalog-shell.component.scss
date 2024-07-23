@@ -21,7 +21,7 @@ article {
     --deg: 0deg;
     color: var(--color);
     transform: rotate(var(--deg)) translateY(var(--y));
-    
+
 
     &:hover {
         --deg: 0 !important;
@@ -55,7 +55,11 @@ h2 {
 h3 {
     padding: 0 1ch;
     margin: 0;
-    font-size: 1.08rem;
+    font-size: 1rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 
 img {
@@ -80,9 +84,15 @@ img {
     display: block;
     transform: translateY(-1ch);
 }
+
 section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr));
     gap: 2ch;
     padding: 3ch;
+}
+
+loading {
+    position: relative;
+    font-family: 'Troubleside';
 }

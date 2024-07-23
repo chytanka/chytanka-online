@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@1,500&family=Rampart+One&display=swap');
+@font-face {
+    font-family: 'Troubleside';
+    src: url('/fonts/Troubleside.ttf');
+}
 
 :root {
     --radius: 1ch;
@@ -9,14 +12,19 @@
     --blur: 1ch;
     --t: 133.333334ms; //266.666667ms; //calc(1s / 60 * 16);
     --surface: hsl(203.44 8% 16%);
+    --surface-avarage: oklch(from var(--avarage-color, var(--surface)) 0.28 0.01 h);
     --text: hsl(200 5% 80%);
     color-scheme: light dark;
-    background-color: var(--surface);
+    background-color: var(--surface-avarage);
+    
     color: var(--text);
     block-size: 100%;
     font-size: 16px;
 
     @media (prefers-color-scheme: light) {
+        
+    --surface-avarage: oklch(from var(--avarage-color, var(--surface)) 0.89 0.01 h);
+
         --surface: #f7fcff;
         --text: #010102;
     }
