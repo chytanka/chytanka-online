@@ -2,7 +2,7 @@
 
 <div>
     @if(currentId()){<iframe class="chtnk-frame"
-        [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.github.io/mangadex/'+currentId()+'?lang=uk')"
+        [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.github.io/mangadex/'+currentId()+'?lang=uk&vm='+ (MangadexHelper.isLongStrip(title.attributes.tags) ? '3': '1'))"
         frameborder="0" allowfullscreen title="Chytanka"></iframe>}
 
     <p>
@@ -13,8 +13,25 @@
         }
     </p>
 
-    <p>{{title.attributes.description.uk ?? title.attributes.description.en ??
-        title.attributes.description[title.attributes.originalLanguage]}}</p>
+    <p>{{MangadexHelper.desc(title.attributes)}}</p>
+
+    <p style="display: flex; flex-wrap: wrap; gap: 1ch;">
+        @for (genre of MangadexHelper.genreTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{genre: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        }
+ 
+        @for (genre of MangadexHelper.themeTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{theme: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        }
+
+        @for (genre of MangadexHelper.contentTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{content: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        }
+ 
+        @for (genre of MangadexHelper.formatTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{format: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+        }
+    </p>
 </div>
 
 <aside>
@@ -31,8 +48,7 @@
                 <span title="Розділ">р.{{episode.attributes.chapter}} </span> }
                 <span>{{episode?.attributes?.title}}</span> </a>
 
-            <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date : 'medium' :
-                    'uk-UA'}}</data> <a
+            <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date : 'medium'}}</data> <a
                     [href]="MangadexHelper.getScanlationGroup(episode.relationships)?.attributes.website ?? ''"
                     target="_blank" rel="noopener noreferrer">
                     {{MangadexHelper.getScanlationGroup(episode.relationships)?.attributes.name}}</a></small>

@@ -1,6 +1,11 @@
 import { Component, LOCALE_ID } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 
+import { registerLocaleData } from '@angular/common';
+import localeUk from "@angular/common/locales/uk";
+
+registerLocaleData(localeUk)
+
 @Component({
   selector: 'app-root',
   standalone: true,

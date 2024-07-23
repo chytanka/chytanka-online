@@ -1,24 +1,31 @@
-import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { TitleService } from '../data-access/title.service';
 import { map, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer, Title } from '@angular/platform-browser';
+import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { getAverageColor } from '../../shared/utils/average-color';
 import { MangadexHelper } from '../../shared/utils';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-title',
   templateUrl: './title.component.html',
   styleUrl: './title.component.scss'
 })
-export class TitleComponent {
+export class TitleComponent implements OnInit {
+  ngOnInit(): void {
+    this.document = (isPlatformBrowser(this.platformId)) ? document?.documentElement : undefined;
+  }
   Object = Object;
   MangadexHelper = MangadexHelper
 
-  document = document.documentElement;
+  platformId = inject(PLATFORM_ID)
+
+  document = (isPlatformBrowser(this.platformId)) ? document?.documentElement : undefined;
   titleService: TitleService = inject(TitleService);
   protected route: ActivatedRoute = inject(ActivatedRoute)
   title = inject(Title)
+  meta = inject(Meta)
   sanitizer = inject(DomSanitizer)
 
   activeIndex = signal(0)
@@ -27,7 +34,16 @@ export class TitleComponent {
     map(res => res.data),
     tap((v) => {
       const t = MangadexHelper.getTitle(v.attributes)
-      this.title.setTitle(`Читати ${t} в Читанці онлайн`)
+      const metaTitle = `Читати ${t} в Читанці онлайн`;
+      this.title.setTitle(metaTitle)
+      this.meta.updateTag({
+        name: 'title',
+        content: metaTitle
+      })
+      this.meta.updateTag({
+        name: 'description',
+        content: this.MangadexHelper.desc(v.attributes)
+      })
     }
     )
   )
@@ -38,7 +54,8 @@ export class TitleComponent {
   currentId = signal('')
   listBlobUrl = '';
 
-  averageColor(event: Event, element: HTMLElement) {
+  averageColor(event: Event, element: HTMLElement | undefined) {
+    if (!element) return;
     const img = event.target as HTMLImageElement
 
     if (!img) return;

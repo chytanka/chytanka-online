@@ -3,7 +3,7 @@ import { BehaviorSubject, catchError, combineLatest, finalize, map, MonoTypeOper
 import { CatalogService } from '../data-access/catalog.service';
 import { getAverageColor } from '../../shared/utils/average-color';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { MangadexHelper } from '../../shared/utils';
 
 @Component({
@@ -31,6 +31,7 @@ export class CatalogShellComponent {
 
   catalog: CatalogService = inject(CatalogService);
   title: Title = inject(Title);
+  meta = inject(Meta)
   protected route: ActivatedRoute = inject(ActivatedRoute)
 
   list$ = this.combineQueryParamsAndRefresh()
@@ -52,7 +53,20 @@ export class CatalogShellComponent {
             el.deg = this.getRandomDeg()
           })),
           tap(v => this.catalog.total.set(v.total)),
-          tap(v => this.title.setTitle(`Читанка Онлайн — більше ${this.roundToNearest(v.total)} тайтлів українською`)),
+          tap(v => {
+            const metaTitle = `Читанка Онлайн — більше ${this.roundToNearest(v.total)} тайтлів українською`
+            this.title.setTitle(metaTitle)
+
+            this.meta.updateTag({
+              name: 'title',
+              content: metaTitle
+            })
+
+            this.meta.updateTag({
+              name: 'description',
+              content: `Читати манґу українською онлайн. Не найбільша колекція перекладів манги українською, але все ж... вже більше ${this.roundToNearest(v.total)} тайтлів українською`
+            })
+          }),
           this.finalizeLoading()
         )
       })
