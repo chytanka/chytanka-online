@@ -6,7 +6,7 @@
         },
         {
             "src": "/(.*)",
-            "dest": "server/server.mjs"
+            "dest": "dist/chytanka-online/server/server.mjs"
         }
     ]
 }
