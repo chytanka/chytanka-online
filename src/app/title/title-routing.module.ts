@@ -5,7 +5,8 @@ import { TitleComponent } from './title/title.component';
 const routes: Routes = [
   {
     path: '',
-    component: TitleComponent
+    component: TitleComponent,
+    pathMatch: 'full'
   },
 ];
 

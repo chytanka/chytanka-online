@@ -4,7 +4,8 @@ import { CatalogShellComponent } from './catalog-shell/catalog-shell.component';
 
 const routes: Routes = [{
   path: '',
-  component: CatalogShellComponent
+  component: CatalogShellComponent,
+  pathMatch: 'full'
 }];
 
 @NgModule({
