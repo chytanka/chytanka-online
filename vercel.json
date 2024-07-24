@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "routes": [
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/dist/chytanka-online/server/server.mjs"
+        }
+    ]
+}
