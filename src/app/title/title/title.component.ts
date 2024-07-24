@@ -34,7 +34,7 @@ export class TitleComponent implements OnInit {
     map(res => res.data),
     tap((v) => {
       const t = MangadexHelper.getTitle(v.attributes)
-      const metaTitle = `Читати ${t} в Читанці онлайн`;
+      const metaTitle = `Читати ${t} онлайн в Читанці`;
       this.title.setTitle(metaTitle)
       this.meta.updateTag({
         name: 'title',
