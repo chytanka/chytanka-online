@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "name": "chytanka-online",
+    "builds": [
+        {
+            "src": "dist/chytanka-online/server/server.mjs",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "dist/chytanka-online/browser/*",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "dist/chytanka-online/server/server.mjs"
+        }
+    ]
+}
