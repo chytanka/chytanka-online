@@ -6,7 +6,7 @@ article {
     background-color: var(--avarage-color, #c3d3e3);
     background-color: oklch(from var(--avarage-color, #c3d3e3) 82% c h);
     padding-bottom: 1ch;
-    transition: all var(--t) ease-in-out;
+    transition: all var(--t) steps(1, jump-both);
     --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
     --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
     box-shadow: .1ch .1ch var(--shc),

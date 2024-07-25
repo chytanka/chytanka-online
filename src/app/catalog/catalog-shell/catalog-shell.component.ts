@@ -5,6 +5,7 @@ import { getAverageColor } from '../../shared/utils/average-color';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { MangadexHelper } from '../../shared/utils';
+import { MetaTagsService } from '../../shared/data-access/meta-tags.service';
 
 @Component({
   selector: 'chtnk-catalog-shell',
@@ -25,8 +26,8 @@ export class CatalogShellComponent {
   }
 
   catalog: CatalogService = inject(CatalogService);
-  title: Title = inject(Title);
-  meta = inject(Meta)
+  meta = inject(MetaTagsService)
+
   protected route: ActivatedRoute = inject(ActivatedRoute)
 
   list$ = this.combineQueryParamsAndRefresh()
@@ -89,9 +90,8 @@ export class CatalogShellComponent {
       const metaTitle = `Читанка Онлайн — більше ${this.roundToNearest(v.total)} тайтлів українською`
       const metaDesc = `Читати манґу українською онлайн. Не найбільша колекція перекладів манги українською, але все ж... вже більше ${this.roundToNearest(v.total)} тайтлів українською`;
 
-      this.title.setTitle(metaTitle)
-      this.meta.updateTag({ name: 'title', content: metaTitle })
-      this.meta.updateTag({ name: 'description', content: metaDesc })
+      this.meta.setTitle(metaTitle)
+      this.meta.setDesc( metaDesc )
     })
   }
 

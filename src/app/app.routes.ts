@@ -13,6 +13,10 @@ export const routes: Routes = [
         component: TitleComponent
     },
     {
+        path: 'title/:id',
+        component: TitleComponent
+    },
+    {
         path: '', component: CatalogShellComponent
     }
     // {
