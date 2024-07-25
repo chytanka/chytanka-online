@@ -9,9 +9,9 @@ const routes: Routes = [
     pathMatch: 'full'
   },
 ];
-
+// RouterModule.forChild(routes)
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [],
   exports: [RouterModule]
 })
 export class TitleRoutingModule { }

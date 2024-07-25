@@ -11,6 +11,14 @@ import { Meta, Title } from '@angular/platform-browser';
 export class AboutComponent implements OnInit{
   ngOnInit(): void {
     this.title.setTitle(`Про Читанку Онлайн`)
+    this.meta.updateTag({
+      name: "title",
+      content: `Про Читанку Онлайн`
+    })
+    this.meta.updateTag({
+      name: "description",
+      content: `Про Читанку Онлайн — проєкт, для зручного читанння манґи українською.`
+    })
   }
   title = inject(Title)
   meta = inject(Meta)
