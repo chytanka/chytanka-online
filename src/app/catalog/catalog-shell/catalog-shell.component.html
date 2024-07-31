@@ -1,44 +1,22 @@
-<!-- <pre>{{list$ | async | json}}</pre> -->
-<!-- 🔎✍❌⬅️➡️ -->
 @if (error$ | async) {
 error
 }
-@if(loading$ | async) {
-<loading />
-}
-
-
 
 @if (list$ | async; as list) { @if(!(loading$ | async)){
-<h2>🗂️ Знайдено {{catalog.total()}} тайтлів з 🇺🇦 перекладом</h2>
-
-<!-- <form action="/">
-<input type="search" name="q">
-<input type="hidden" name="page" value="1">
-</form> -->
+<div style="display: grid; grid-template-columns: 1fr auto; gap: 1ch; align-items: center;">
+    <h2>🗂️ Знайдено {{catalog.total()}} тайтлів з 🇺🇦 перекладом</h2>
+    <button disabled class="button" title="Фільтр">🎛️</button>
+</div>
 
 <section>
     @for (item of list.data; track $index) {
-    <article #article [style]="{'--deg': item.deg+'deg'}">
-        <img loading="lazy" [routerLink]="['/', item.id]"
-            [src]="catalog.proxy.proxyUrl('https://mangadex.org/covers/'+item.id+'/'+MangadexHelper.getCover(item.relationships).attributes?.fileName+'.512.jpg')"
-            alt="Cover {{MangadexHelper.getTitle(item.attributes)}}" (load)="averageColor($event, article)"
-            crossOrigin="anonymous" />
-        <a [routerLink]="['/', item.id]" style="line-break: loose;">
-            <h3>
-                <span [title]="item.attributes.status">{{MangadexHelper.statusMap.get(item.attributes.status)}}</span>
-                <span
-                    [title]="item.attributes.contentRating">{{MangadexHelper.contentRatingMap.get(item.attributes.contentRating)}}</span>
-                {{MangadexHelper.getTitle(item.attributes)}}
-            </h3>
-        </a>
-    </article>
+    <title-card [item]="item" />
     }
 
 </section>
 
-<div style="text-align: center;">
-    📄
+<div style="text-align: center; padding: 4ch var(--gap) var(--gap);">
+    <span>📄</span>
 
     <ul style="display: inline-flex; margin: 0; font-family: 'Troubleside';
     padding: 0; gap: 1ch; list-style: none; align-items: center;">
@@ -52,4 +30,8 @@ error
         }
     </ul>
 </div>
-}}
+} @else {
+<loading />
+}
+
+}

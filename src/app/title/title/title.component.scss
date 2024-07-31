@@ -71,3 +71,22 @@ aside {
         margin: 0;
     }
 }
+
+.sites {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1ch;
+    margin: 1ch 0;
+
+    div {
+        display: flex;
+        gap: .5ch;
+        align-self: center;
+    }
+}
+
+.favicon {
+    display: inline-block;
+    width: 1lh;
+    aspect-ratio: 1;
+}

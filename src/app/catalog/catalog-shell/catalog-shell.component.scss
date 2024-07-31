@@ -1,71 +1,14 @@
-article {
+:host {
+    --gap: 2ch;
+    display: block;
+    padding: var(--gap);
+}
+
+section {
     display: grid;
-    gap: 1ch;
-    border-radius: var(--radius);
-    overflow: hidden;
-    background-color: var(--avarage-color, #c3d3e3);
-    background-color: oklch(from var(--avarage-color, #c3d3e3) 82% c h);
-    padding-bottom: 1ch;
-    transition: all var(--t) steps(1, jump-both);
-    --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
-    --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
-    box-shadow: .1ch .1ch var(--shc),
-        .2ch .2ch var(--shc),
-        .3ch .3ch var(--shc2);
-    border: 1px solid var(--shc2);
-
-
-    --color: oklch(from var(--avarage-color, #c3d3e3) 42% c calc(h + 180));
-    --link-hover-color: oklch(from var(--avarage-color, #c3d3e3) 42% 0.16 calc(h + 180));
-    --y: 0ch;
-    --deg: 0deg;
-    color: var(--color);
-    transform: rotate(var(--deg)) translateY(var(--y));
-
-
-    &:hover {
-        --deg: 0 !important;
-        --y: -1ch;
-
-        box-shadow: .1ch .1ch var(--shc2),
-            .2ch .2ch var(--shc),
-            .3ch .3ch var(--shc),
-            .4ch .4ch var(--shc),
-            .5ch .5ch var(--shc),
-            .6ch .6ch var(--shc),
-            .7ch .7ch var(--shc),
-            .8ch .8ch var(--shc),
-            .9ch .9ch var(--shc2),
-    }
-}
-
-a {
-    color: inherit;
-}
-
-a:hover {
-    color: var(--link-hover-color);
-}
-
-h2 {
-    padding: 0 2ch;
-    margin-bottom: 0;
-}
-
-h3 {
-    padding: 0 1ch;
-    margin: 0;
-    font-size: 1rem;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-}
-
-img {
-    aspect-ratio: 2/3;
-    object-fit: cover;
-    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(var(--min-card-width), 1fr));
+    gap: var(--gap);
+    perspective: 4000px;
 }
 
 .tags {
@@ -83,13 +26,6 @@ img {
 .button.active {
     display: block;
     transform: translateY(-1ch);
-}
-
-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--min-card-width), 1fr));
-    gap: 2ch;
-    padding: 3ch;
 }
 
 loading {

@@ -24,7 +24,7 @@ export class TitleService {
 
   getTitleEpisodes(id: string, lg: string = 'uk'): Observable<any> {
 
-    return this.http.get<any>(this.proxy.proxyUrl(`https://api.mangadex.org/manga/${id}/feed?translatedLanguage[]=${lg}&limit=${this.limit()}&offset=${this.offset()}&includes[]=scanlation_group&order[volume]=asc&order[chapter]=asc`));
+    return this.http.get<any>(this.proxy.proxyUrl(`https://api.mangadex.org/manga/${id}/feed?translatedLanguage[]=${lg}&limit=${this.limit()}&offset=${this.offset()}&includes[]=scanlation_group&order[volume]=asc&order[chapter]=asc&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic`));
   }
 }
 

@@ -1,4 +1,7 @@
 export class MangadexHelper {
+    static isNSFW(attributes: any){
+        return (attributes.contentRating == 'pornographic')
+    }
     static getCover(relationships: any[]): any {
         return relationships?.filter((r: any) => r.type == 'cover_art')[0] ?? null
     }

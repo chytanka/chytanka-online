@@ -25,4 +25,13 @@ export class MetaTagsService {
       content: desc
     })
   }
+
+  removeAdult() {
+    this.meta.removeTag(`name='rating'`)
+  }
+
+  setAdult() {
+    this.removeAdult();
+    this.meta.addTag({ name: 'rating', content: 'adult' })
+  }
 }

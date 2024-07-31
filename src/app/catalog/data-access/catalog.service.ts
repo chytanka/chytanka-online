@@ -3,6 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProxyService } from '../../shared/data-access/proxy.service';
 
+type OrderDirection = 'asc' | 'desc'
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,18 @@ export class CatalogService {
   total = signal(0)
 
   page = signal(1);
+  query = signal('');
+  tag = signal('')
+  group = signal('')
+  order = signal('relevance');
+  orderDirection = signal<OrderDirection>('asc');
 
-  offset = computed(() => this.page() == 1 ? 0 : this.limit() * (this.page()))
-  limit = signal(30)
+  // offset = computed(() => this.page() == 1 ? 0 : this.limit() * (this.page()))
+  offset = computed(() => this.limit() * (this.page() -1))
+  limit = signal(32)
 
   getPaginationPages(totalItems: number, currentPage: number, limit: number) {
-    const totalPages = Math.floor(totalItems / limit);
+    const totalPages = Math.ceil(totalItems / limit);
     const paginationPages: Array<any> = [];
 
     // Calculate the range of pages to display
@@ -47,23 +54,38 @@ export class CatalogService {
     return paginationPages;
   }
 
-  //#region filters
-
-  //#endregion
-
   http: HttpClient = inject(HttpClient)
   proxy: ProxyService = inject(ProxyService)
 
-  getTranslateTitles(q: string = '', lg: string = 'uk'): Observable<any> {
-    const query = q ? `title=${q}&` : ''
-    const url = `https://api.mangadex.org/manga?${query}limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&availableTranslatedLanguage[]=${lg}&order[relevance]=desc&includedTagsMode=AND&excludedTagsMode=OR`;
+  contentRating = [
+    { value: 'safe', active: true },
+    { value: 'suggestive', active: true },
+    { value: 'erotica', active: true },
+    { value: 'pornographic', active: true }
+  ]
+
+  getActiveContentRating() {
+    return this.contentRating.filter(v=>v.active).map(v=>`&contentRating[]=${v.value}`).join('');
+  }
+
+  getTranslateTitles(lg: string = 'uk'): Observable<any> {
+    const query = this.query() ? `title=${this.query()}&` : ''
+    const includedTags = this.tag() ? `&includedTags[]=${this.tag()}` : ''
+    const group = this.group() ? `&group=${this.group()}` : ''
+
+    const contentRating = this.getActiveContentRating();
+    
+
+    const url = `https://api.mangadex.org/manga?${query}limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art${contentRating}&availableTranslatedLanguage[]=${lg}&order[${this.order()}]=${this.orderDirection()}&includedTagsMode=AND&excludedTagsMode=OR${includedTags}${group}`;
 
     return this.http.get<any>(this.proxy.proxyUrl(url));
   }
 
-  getOriginalTitles(q: string = '', lg: string = 'uk'): Observable<any> {
-    const query = q ? `title=${q}&` : ''
-    const url = `https://api.mangadex.org/manga?${query}limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&originalLanguage[]=${lg}&order[relevance]=desc&includedTagsMode=AND&excludedTagsMode=OR`;
+  getOriginalTitles(lg: string = 'uk'): Observable<any> {
+    const query = this.query() ? `title=${this.query()}&` : ''
+    const includedTags = this.tag() ? `&includedTags[]=${this.tag()}` : ''
+
+    const url = `https://api.mangadex.org/manga?${query}limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&originalLanguage[]=${lg}&order[${this.order()}]=${this.orderDirection()}&includedTagsMode=AND&excludedTagsMode=OR${includedTags}`;
 
     return this.http.get<any>(this.proxy.proxyUrl(url));
   }
@@ -80,3 +102,13 @@ export class CatalogService {
 // content rating: 🌟 safe, 🍑 suggestive, erotica, 🔞 pornographic
 
 // Manga status: 🔄 ongoing, ✅ completed, 💤 hiatus, ⛔ cancelled
+
+// https://api.mangadex.org/manga?limit=32&offset=0&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic&includedTags[]=4d32cc48-9f00-4cca-9b5a-a839f0764984&includedTags[]=423e2eae-a7a2-4a8b-ac03-a8351462d71d&includedTagsMode=AND&excludedTagsMode=OR
+
+
+//by group
+//https://api.mangadex.org/manga?limit=32&offset=0&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic&group=c0b55b53-89e8-4413-bb0e-9f363af23293
+
+// random
+
+// https://api.mangadex.org/manga/random?contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic&includes[]=artist&includes[]=author&includes[]=cover_art

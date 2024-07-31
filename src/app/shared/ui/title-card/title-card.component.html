@@ -1,0 +1,12 @@
+<img loading="lazy" [routerLink]="['/', item().id]"
+    [src]="catalog.proxy.proxyUrl('https://mangadex.org/covers/'+item().id+'/'+MangadexHelper.getCover(item().relationships).attributes?.fileName+'.512.jpg')"
+    alt="Cover {{MangadexHelper.getTitle(item().attributes)}}" (load)="averageColor($event)"
+    crossOrigin="anonymous" />
+<a [routerLink]="['/', item().id]" style="line-break: loose;">
+    <h3>
+        <span [title]="item().attributes.status">{{MangadexHelper.statusMap.get(item().attributes.status)}}</span>
+        <span
+            [title]="item().attributes.contentRating">{{MangadexHelper.contentRatingMap.get(item().attributes.contentRating)}}</span>
+        {{MangadexHelper.getTitle(item().attributes)}}
+    </h3>
+</a>

@@ -4,7 +4,7 @@ header {
     padding: 1ch;
     display: grid;
     align-items: center;
-    grid-template-columns: 4ch 1fr;
+    grid-template-columns: 4ch auto 1fr;
     gap: 1ch;
     transition: all var(--t) ease-in-out;
 }

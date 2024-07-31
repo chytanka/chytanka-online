@@ -1,9 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, finalize, map, MonoTypeOperatorFunction, Observable, of, OperatorFunction, pipe, switchMap, tap } from 'rxjs';
+import { Component, inject } from '@angular/core';
+import { BehaviorSubject, catchError, combineLatest, finalize, MonoTypeOperatorFunction, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
 import { CatalogService } from '../data-access/catalog.service';
-import { getAverageColor } from '../../shared/utils/average-color';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Meta, Title } from '@angular/platform-browser';
 import { MangadexHelper } from '../../shared/utils';
 import { MetaTagsService } from '../../shared/data-access/meta-tags.service';
 
@@ -19,12 +17,6 @@ export class CatalogShellComponent {
   error$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  /**
-   *
-   */
-  constructor() {
-  }
-
   catalog: CatalogService = inject(CatalogService);
   meta = inject(MetaTagsService)
 
@@ -37,16 +29,20 @@ export class CatalogShellComponent {
 
         const q = params?.get('q') ?? '';
         const page: number = parseFloat(params?.get('page') ?? '1');
-
+        const tag = params?.get('theme') ?? params?.get('format') ?? params?.get('genre') ?? '';
+        const group =  params?.get('group') ?? '';
+        
         this.catalog.page.set(page > 0 ? page : 1);
+        this.catalog.query.set(q);
+        this.catalog.tag.set(tag);
+        this.catalog.group.set(group);
 
-        const data$ = this.catalog.getTranslateTitles(q);
+        const data$ = this.catalog.getTranslateTitles();
 
         return data$.pipe(
           this.catchError(),
           this.tapSetTotalPages(),
           this.tapSetMetaTags(),
-          this.tapSetRandomDeg(),
           this.finalizeLoading()
         )
       })
@@ -54,20 +50,6 @@ export class CatalogShellComponent {
 
   roundToNearest(num: number, nearest = 50) {
     return Math.round(num / nearest) * nearest;
-  }
-
-  getRandomDeg(min: number = -1, max: number = 1) {
-    return (Math.random() * (max - min) + min);
-  }
-
-  averageColor(event: Event, element: HTMLElement) {
-    const img = event.target as HTMLImageElement
-
-    if (!img) return;
-
-    const avc = getAverageColor(img).hex;
-
-    element.style.setProperty('--avarage-color', avc)
   }
 
   protected combineQueryParamsAndRefresh(): Observable<[ParamMap, null]> {
@@ -91,14 +73,8 @@ export class CatalogShellComponent {
       const metaDesc = `Читати манґу українською онлайн. Не найбільша колекція перекладів манги українською, але все ж... вже більше ${this.roundToNearest(v.total)} тайтлів українською`;
 
       this.meta.setTitle(metaTitle)
-      this.meta.setDesc( metaDesc )
+      this.meta.setDesc(metaDesc)
     })
-  }
-
-  protected tapSetRandomDeg(): MonoTypeOperatorFunction<any> {
-    return tap(v => v.data.forEach((el: any) => {
-      if (!el.deg) el.deg = this.getRandomDeg()
-    }))
   }
 
   protected tapSetTotalPages = (): MonoTypeOperatorFunction<any> => tap(v => this.catalog.total.set(v.total));

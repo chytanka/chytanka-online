@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { LoadingComponent } from './ui/loading/loading.component';
 import { SeparatorComponent } from './ui/separator/separator.component';
 import { ImgRotateComponent } from './ui/img-rotate/img-rotate.component';
+import { TitleCardComponent } from './ui/title-card/title-card.component';
 
 
 
@@ -12,13 +13,14 @@ import { ImgRotateComponent } from './ui/img-rotate/img-rotate.component';
   declarations: [
     SeparatorComponent,
     LoadingComponent,
-    ImgRotateComponent
+    ImgRotateComponent,
+    TitleCardComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     RouterModule
   ],
-  exports: [SeparatorComponent, LoadingComponent, ImgRotateComponent]
+  exports: [SeparatorComponent, LoadingComponent, ImgRotateComponent, TitleCardComponent]
 })
 export class SharedModule { }

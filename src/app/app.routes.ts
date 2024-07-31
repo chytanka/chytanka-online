@@ -10,23 +10,12 @@ export const routes: Routes = [
     },
     {
         path: ':id',
-        component: TitleComponent
+        loadChildren: () => import('./title/title.module').then(m => m.TitleModule),
+        pathMatch: 'full'
     },
     {
-        path: 'title/:id',
-        component: TitleComponent
-    },
-    {
-        path: '', component: CatalogShellComponent
+        path: '',
+        loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule),
+        pathMatch: 'full'
     }
-    // {
-    //     path: ':id',
-    //     loadChildren: () => import('./title/title.module').then(m => m.TitleModule),
-    //     pathMatch: 'full'
-    // },
-    // {
-    //     path: '',
-    //     loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule),
-    //     pathMatch: 'full'
-    // },
 ];

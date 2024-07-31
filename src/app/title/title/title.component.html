@@ -5,13 +5,24 @@
         [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.github.io/mangadex/'+currentId()+'?lang=uk&vm='+ (MangadexHelper.isLongStrip(title.attributes.tags) ? '3': '1'))"
         frameborder="0" allowfullscreen title="Chytanka"></iframe>}
 
-    <p>
-        <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
+    <div class="sites">
+        <div>
+            <img class="favicon" [src]="getFavicon('https://mangadex.org')" alt="">
+            <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
+        </div>
         @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track $index) {
-        <a href="{{MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template}}" target="_blank"
-            rel="noopener noreferrer">{{MangadexHelper.getLink(siteId, '')?.name}}</a>
+
+        @if(MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template; as link) {
+
+
+        <div>
+            <img class="favicon" [src]="getFavicon(link)" alt="">
+            <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{MangadexHelper.getLink(siteId,
+                '')?.name}}</a>
+        </div>
         }
-    </p>
+        }
+    </div>
 
     <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
 
@@ -56,17 +67,21 @@
                 <span>{{episode?.attributes?.title ?? 'Без назви'}}</span> </a>
 
             <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date :
-                    'medium'}}</data> <a
-                    [href]="MangadexHelper.getScanlationGroup(episode.relationships)?.attributes.website ?? ''"
-                    target="_blank" rel="noopener noreferrer">
-                    {{MangadexHelper.getScanlationGroup(episode.relationships)?.attributes.name}}</a></small>
+                    'medium'}}</data>
+
+                @if(MangadexHelper.getScanlationGroup(episode.relationships); as group) {
+                <a [routerLink]="'/'" [queryParams]="{'group': group.id}">{{group.attributes.name}}</a>
+                }
+
+
+            </small>
 
         </li>
         }
     </ul>
     }
 
-    <img-rotate
+    <img-rotate [ngClass]="{nsfw: MangadexHelper.isNSFW(title.attributes)}"
         [src]="titleService.proxy.proxyUrl('https://mangadex.org/covers/'+title.id+'/'+MangadexHelper.getCover(title.relationships).attributes?.fileName+'.512.jpg')"
         alt="Cover {{MangadexHelper.getTitle(title.attributes)}}" (load)="averageColor($event, document)" />
 

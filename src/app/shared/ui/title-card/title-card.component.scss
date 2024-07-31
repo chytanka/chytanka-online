@@ -1,0 +1,107 @@
+@property --item-scale {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+}
+
+@property --item-angle {
+    syntax: "<angle>";
+    inherits: true;
+    initial-value: 0deg;
+}
+
+:host {
+    display: grid;
+    gap: 1ch;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: var(--avarage-color, #c3d3e3);
+    background-color: oklch(from var(--avarage-color, #c3d3e3) 82% c h);
+    padding-bottom: 1ch;
+    // transition: all var(--t) steps(2, end);
+    transition: all var(--t) ease-in-out;
+    --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
+    --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
+    box-shadow: .1ch .1ch var(--shc),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc2);
+    border: 1px solid var(--shc2);
+
+
+    --color: oklch(from var(--avarage-color, #c3d3e3) 42% c calc(h + 180));
+    --link-hover-color: oklch(from var(--avarage-color, #c3d3e3) 42% 0.16 calc(h + 180));
+    --y: 0ch;
+    --deg: 0deg;
+    color: var(--color);
+    transform: rotate(var(--deg)) translateY(var(--y)) scale(var(--item-scale)) rotateX(var(--item-angle));
+    // transform-origin: bottom;
+    will-change: transform;
+    opacity: min(var(--item-scale), .8);
+
+    transform-style: preserve-3d;
+
+    &:hover {
+        opacity: 1;
+        --deg: 0 !important;
+        --y: -1ch;
+
+        box-shadow: .1ch .1ch var(--shc2),
+            .2ch .2ch var(--shc),
+            .3ch .3ch var(--shc),
+            .4ch .4ch var(--shc),
+            .5ch .5ch var(--shc),
+            .6ch .6ch var(--shc),
+            .7ch .7ch var(--shc),
+            .8ch .8ch var(--shc),
+            .9ch .9ch var(--shc2),
+    }
+}
+
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
+h3 {
+    padding: 0 1ch;
+    margin: 0;
+    font-size: 1rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+img {
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    width: 100%;
+    grid-area: 1 / 1;
+}
+
+:host.nsfw {
+    img {
+        filter: blur(1ch)
+    }
+}
+
+@supports (animation-timeline: view()) {
+    :host {
+        // animation: scale both steps(12, end), scale both steps(12, end) reverse;
+        animation: scale both ease-in-out, scale both ease-in-out reverse;
+        animation-timeline: view(block);
+        // animation-range: entry 50%, exit 50%;
+        animation-range: entry, exit;
+    }
+
+    @keyframes scale {
+        0% {
+            --item-scale: .5;
+            --item-angle: 90deg;
+        }
+    }
+}

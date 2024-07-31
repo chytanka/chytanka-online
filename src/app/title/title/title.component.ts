@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { TitleService } from '../data-access/title.service';
 import { map, MonoTypeOperatorFunction, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -13,7 +13,10 @@ import { MetaTagsService } from '../../shared/data-access/meta-tags.service';
   templateUrl: './title.component.html',
   styleUrl: './title.component.scss'
 })
-export class TitleComponent implements OnInit {
+export class TitleComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.meta.removeAdult()
+  }
   ngOnInit(): void {
     this.document = (isPlatformBrowser(this.platformId)) ? document?.documentElement : undefined;
   }
@@ -41,10 +44,21 @@ export class TitleComponent implements OnInit {
     return tap((v) => {
       this.meta.setTitle(`Читати ${MangadexHelper.getTitle(v.attributes)} онлайн в Читанці`)
       this.meta.setDesc(this.MangadexHelper.desc(v.attributes))
+
+      if (MangadexHelper.isNSFW(v.attributes)) {
+        console.log(v);
+
+        this.meta.setAdult()
+      }
+
     })
   }
 
-  episodes$ = this.titleService.getTitleEpisodes(this.route.snapshot.params['id']).pipe(tap(v => this.titleService.total.set(v.total)), map(res => res.data), tap(v => this.currentId.set(v[this.activeIndex()].id)))
+  episodes$ = this.titleService.getTitleEpisodes(this.route.snapshot.params['id']).pipe(
+    tap(v => this.titleService.total.set(v.total)),
+    map(res => res.data),
+    tap(v => this.currentId.set(v[this.activeIndex()]?.id))
+  )
 
   currentId = signal('')
   listBlobUrl = '';
@@ -81,15 +95,21 @@ export class TitleComponent implements OnInit {
   // }
 
   parseMarkdown(markdown: string): string {
-    // Замінюємо нові рядки на HTML-теги <p> для абзаців
-    let html = markdown
-      .split('\n\n') // Розбиваємо текст на абзаци
-      .map(paragraph => `<p>${paragraph.replace(/\n/g, ' ')}</p>`) // Заміна нових рядків в абзацах на пробіли
-      .join('\n'); // Об'єднуємо абзаци назад в один рядок
+    if (!markdown) return ''
 
-    // Замінюємо Markdown посилання на HTML
+    let html = markdown
+      .split('\n\n')
+      .map(paragraph => `<p>${paragraph.replace(/\n/g, ' ')}</p>`)
+      .join('\n');
+
     html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 
     return html;
+  }
+
+  getFavicon(link: string) {
+    const url = new URL(link)
+
+    return url.origin + '/favicon.ico'
   }
 }
