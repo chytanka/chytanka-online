@@ -7,12 +7,19 @@ header {
     grid-template-columns: 4ch auto 1fr;
     gap: 1ch;
     transition: all var(--t) ease-in-out;
+    @media (max-width: 800px) {
+        grid-template-columns: 4ch 1fr;
+    }
 }
 
 #logo {
     display: block;
     aspect-ratio: 1;
     width: 100%;
+    filter: drop-shadow(2px 2px var(--shc));
+}
+
+.search {
     filter: drop-shadow(2px 2px var(--shc));
 }
 

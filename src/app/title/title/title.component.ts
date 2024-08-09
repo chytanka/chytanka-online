@@ -31,7 +31,6 @@ export class TitleComponent implements OnInit, OnDestroy {
 
   sanitizer = inject(DomSanitizer)
 
-  activeIndex = signal(0)
 
   meta = inject(MetaTagsService)
 
@@ -57,11 +56,25 @@ export class TitleComponent implements OnInit, OnDestroy {
   episodes$ = this.titleService.getTitleEpisodes(this.route.snapshot.params['id']).pipe(
     tap(v => this.titleService.total.set(v.total)),
     map(res => res.data),
-    tap(v => this.currentId.set(v[this.activeIndex()]?.id))
+    tap(v => this.setCurrentId(this.getCurrentId() ??  v[0]?.id))
   )
 
-  currentId = signal('')
+
   listBlobUrl = '';
+
+  getCurrentId() {
+
+    return (isPlatformBrowser(this.platformId))? localStorage.getItem(this.route.snapshot.params['id']) : ''
+  }
+
+  setCurrentId( id: string) {
+    this.currentId.set(id);
+    if (isPlatformBrowser(this.platformId))
+      localStorage.setItem(this.route.snapshot.params['id'], id);
+  }
+  
+
+  currentId = signal(this.getCurrentId())
 
   averageColor(event: Event, element: HTMLElement | undefined) {
     if (!element) return;

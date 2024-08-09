@@ -27,6 +27,9 @@
     <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
 
     <p style="display: flex; flex-wrap: wrap; gap: 1ch;">
+        <span [title]="title.attributes.status">{{MangadexHelper.statusMap.get(title.attributes.status)}}</span>
+        <span
+            [title]="title.attributes.contentRating">{{MangadexHelper.contentRatingMap.get(title.attributes.contentRating)}}</span>
         @for (genre of MangadexHelper.genreTags(title.attributes.tags); track $index) {
         <a [routerLink]="['/']" [queryParams]="{genre: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
         }
@@ -46,41 +49,37 @@
 </div>
 
 <aside>
+    <section class="contents">
+        <h2 style="color: var(--shc);">
+            {{MangadexHelper.getTitle(title.attributes)}}
+        </h2>
 
-    <h2 style="color: var(--shc);">
+        @if (episodes$ | async; as episodes) {
 
-        <span [title]="title.attributes.status">{{MangadexHelper.statusMap.get(title.attributes.status)}}</span>
-        <span
-            [title]="title.attributes.contentRating">{{MangadexHelper.contentRatingMap.get(title.attributes.contentRating)}}</span>
+        <ul class="episode-list">@for (episode of episodes; track $index) {
+            <li [ngClass]="{active: episode.id == currentId()}"><a (click)="setCurrentId(episode.id)">
+                    @if(episode.attributes.volume){
+                    <span title="Том">т.{{episode.attributes.volume}} </span> }
+                    @if(episode.attributes.chapter){
+                    <span title="Розділ">р.{{episode.attributes.chapter}} </span> }
+                    <span>{{episode?.attributes?.title ?? 'Без назви'}}</span> </a>
 
-        {{MangadexHelper.getTitle(title.attributes)}}
-    </h2>
+                <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date :
+                        'mediumDate'}} <br> {{episode.attributes.publishAt | date :
+                        'mediumTime'}} </data>
 
-    @if (episodes$ | async; as episodes) {
-
-    <ul class="episode-list">@for (episode of episodes; track $index) {
-        <li [ngClass]="{active: episode.id == currentId()}"><a (click)="currentId.set(episode.id)">
-                @if(episode.attributes.volume){
-                <span title="Том">т.{{episode.attributes.volume}} </span> }
-                @if(episode.attributes.chapter){
-                <span title="Розділ">р.{{episode.attributes.chapter}} </span> }
-                <span>{{episode?.attributes?.title ?? 'Без назви'}}</span> </a>
-
-            <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date :
-                    'medium'}}</data>
-
-                @if(MangadexHelper.getScanlationGroup(episode.relationships); as group) {
-                <a [routerLink]="'/'" [queryParams]="{'group': group.id}">{{group.attributes.name}}</a>
-                }
+                    @if(MangadexHelper.getScanlationGroup(episode.relationships); as group) {
+                    <a [routerLink]="'/'" [queryParams]="{'group': group.id}">{{group.attributes.name}}</a>
+                    }
 
 
-            </small>
+                </small>
 
-        </li>
+            </li>
+            }
+        </ul>
         }
-    </ul>
-    }
-
+    </section>
     <img-rotate [ngClass]="{nsfw: MangadexHelper.isNSFW(title.attributes)}"
         [src]="titleService.proxy.proxyUrl('https://mangadex.org/covers/'+title.id+'/'+MangadexHelper.getCover(title.relationships).attributes?.fileName+'.512.jpg')"
         alt="Cover {{MangadexHelper.getTitle(title.attributes)}}" (load)="averageColor($event, document)" />

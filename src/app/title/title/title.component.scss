@@ -31,9 +31,25 @@
     @media ((orientation: portrait) and (max-aspect-ratio: 1)) or (max-width: 1024px) {
         aspect-ratio: 2/3;
     }
+
     // @media (max-width: 800px) {
     //     max-height: 80vh;
     // }
+}
+
+.contents {
+    display: grid;
+    gap: 1ch;
+    border-radius: .5ch;
+    border: 1px solid var(--shc2);
+    box-shadow: .1ch .1ch var(--shc),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc2);
+    background-color: oklch(from var(--surface-avarage) calc(l + .1) c h);
+
+    h2 {
+        padding: 0 1ch;
+    }
 }
 
 .episode-list {
@@ -44,29 +60,27 @@
     margin: 0;
     overflow: auto;
     align-content: baseline;
-
+    
     li {
+        align-items: center;
         padding: .5ch 1ch;
-        box-shadow: .1ch .1ch var(--shc2),
-            .2ch .2ch var(--shc);
-        border-radius: .5ch;
         font-size: small;
-
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 1ch;
 
         &.active {
-            background-color: oklch(from var(--avarage-color, #c3d3e3) 40% c h);
+            background-color: oklch(from var(--surface-avarage) calc(l - .1) c h);
         }
     }
 }
 
 aside {
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: 1fr auto;
     max-height: calc(100vh - (60px + 4ch));
     gap: 2ch;
+
     h2 {
         margin: 0;
     }

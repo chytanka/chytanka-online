@@ -4,7 +4,7 @@
   <form action="/">
     <div style="display: grid; grid-template-columns: 1fr auto; gap: 1ch; align-items: center;">
     
-        <input placeholder="Пошук тайтлів" type="search" name="q" [value]="catalog.query()">
+        <input class="search" placeholder="Пошук тайтлів" type="search" name="q" [value]="catalog.query()">
         <button class="button" type="submit">🔎</button>
         </div>
     <input type="hidden" name="page" value="1">
