@@ -41,12 +41,10 @@ export class TitleComponent implements OnInit, OnDestroy {
 
   protected tapSetMetaTags(): MonoTypeOperatorFunction<any> {
     return tap((v) => {
-      this.meta.setTitle(`Читати ${MangadexHelper.getTitle(v.attributes)} онлайн в Читанці`)
+      this.meta.setTitle(`Читати ${MangadexHelper.getTitle(v.attributes)} від ${MangadexHelper.getAuthor(v.relationships).attributes.name} онлайн в Читанці`)
       this.meta.setDesc(this.MangadexHelper.desc(v.attributes))
 
       if (MangadexHelper.isNSFW(v.attributes)) {
-        console.log(v);
-
         this.meta.setAdult()
       }
 

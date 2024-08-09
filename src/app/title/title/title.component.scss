@@ -39,6 +39,7 @@
 
 .contents {
     display: grid;
+    grid-template-rows: auto 1fr;
     gap: 1ch;
     border-radius: .5ch;
     border: 1px solid var(--shc2);

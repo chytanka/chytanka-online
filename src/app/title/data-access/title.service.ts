@@ -19,7 +19,7 @@ export class TitleService {
 
   getTitle(id: string): Observable<any> {
 
-    return this.http.get<any>(this.proxy.proxyUrl(`https://api.mangadex.org/manga/${id}?includes[]=cover_art`));
+    return this.http.get<any>(this.proxy.proxyUrl(`https://api.mangadex.org/manga/${id}?includes[]=cover_art&includes[]=artist&includes[]=author`));
   }
 
   getTitleEpisodes(id: string, lg: string = 'uk'): Observable<any> {

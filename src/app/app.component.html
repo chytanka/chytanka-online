@@ -1,16 +1,20 @@
 <header>
   <img [routerLink]="'/'" id="logo" src="/icons/icon-72x72.svg" alt="Chytanka logo">
-  <h1 [routerLink]="'/'" class="logo-text">Читанка<sub><small title="beta">β</small></sub><sup><small>Online</small></sup></h1>
+  <h1 [routerLink]="'/'" class="logo-text">Читанка<sub><small
+        title="beta">β</small></sub><sup><small>Online</small></sup></h1>
   <form action="/">
     <div style="display: grid; grid-template-columns: 1fr auto; gap: 1ch; align-items: center;">
-    
-        <input class="search" placeholder="Пошук тайтлів" type="search" name="q" [value]="catalog.query()">
-        <button class="button" type="submit">🔎</button>
-        </div>
+
+      <input class="search" placeholder="Пошук тайтлів" type="search" name="q" [value]="catalog.query()">
+      <button class="button" type="submit">🔎</button>
+    </div>
     <input type="hidden" name="page" value="1">
-    </form>
+  </form>
 </header>
 <main><router-outlet /></main>
-<footer>Читанка<sup style="color: #1f6c00; font-family: 'Courier New', Courier, monospace;"><small>Online</small></sup> &copy; 2024 | Powered with <a
-    href="http://mangadex.org" target="_blank" rel="noopener noreferrer">MangaDex</a>
-  </footer>
+<footer>
+  <div>Читанка<sup style="color: #1f6c00; font-family: 'Courier New', Courier, monospace;"><small>Online</small></sup>
+    &copy; 2024 | Powered with <a href="http://mangadex.org" target="_blank" rel="noopener noreferrer">MangaDex</a>
+  </div>
+  <made-in-ukraine />
+</footer>

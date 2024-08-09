@@ -1,9 +1,17 @@
 export class MangadexHelper {
-    static isNSFW(attributes: any){
-        return (attributes.contentRating == 'pornographic')
+    static isNSFW(attributes: any) {
+        return (['pornographic', 'erotica'].includes(attributes.contentRating))
     }
     static getCover(relationships: any[]): any {
         return relationships?.filter((r: any) => r.type == 'cover_art')[0] ?? null
+    }
+
+    static getAuthor(relationships: any[]): any {
+        return relationships?.filter((r: any) => r.type == 'author')[0] ?? null
+    }
+
+    static getArtist(relationships: any[]): any {
+        return relationships?.filter((r: any) => r.type == 'artist')[0] ?? null
     }
 
     static getTitle(attributes: any): any {

@@ -10,6 +10,11 @@ header {
     @media (max-width: 800px) {
         grid-template-columns: 4ch 1fr;
     }
+
+    // background-image: url('/pattern.svg');
+    // background-size: auto 200%;
+    // background-repeat: repeat-x;
+    // background-position: bottom;
 }
 
 #logo {
@@ -58,4 +63,11 @@ footer {
     padding: 1ch;
     font-size: small;
     text-align: center;
+    display: flex; 
+    align-items: center;
+    gap: 1ch;
+}
+
+made-in-ukraine {
+    margin: 1ch;
 }

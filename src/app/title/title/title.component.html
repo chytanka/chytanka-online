@@ -10,7 +10,9 @@
             <img class="favicon" [src]="getFavicon('https://mangadex.org')" alt="">
             <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
         </div>
-        @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track $index) {
+        @if(title.attributes.links?.length > 0){
+        @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track
+        $index) {
 
         @if(MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template; as link) {
 
@@ -21,7 +23,7 @@
                 '')?.name}}</a>
         </div>
         }
-        }
+        }}
     </div>
 
     <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
@@ -51,7 +53,7 @@
 <aside>
     <section class="contents">
         <h2 style="color: var(--shc);">
-            {{MangadexHelper.getTitle(title.attributes)}}
+            {{MangadexHelper.getTitle(title.attributes)}} від {{MangadexHelper.getAuthor(title.relationships).attributes.name}}
         </h2>
 
         @if (episodes$ | async; as episodes) {

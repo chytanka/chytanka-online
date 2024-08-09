@@ -6,13 +6,14 @@ import localeUk from "@angular/common/locales/uk";
 import { CatalogModule } from './catalog/catalog.module';
 import { TitleModule } from './title/title.module';
 import { CatalogService } from './catalog/data-access/catalog.service';
+import { SharedModule } from "./shared/shared.module";
 
 registerLocaleData(localeUk)
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, CatalogModule, TitleModule],
+  imports: [RouterOutlet, RouterModule, CatalogModule, TitleModule, SharedModule],
   providers: [{ provide: LOCALE_ID, useValue: 'uk-UA'}],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

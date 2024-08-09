@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProxyService } from '../../shared/data-access/proxy.service';
+import { CatalogParamsService } from './catalog-params.service';
 
 type OrderDirection = 'asc' | 'desc'
 
@@ -9,6 +10,7 @@ type OrderDirection = 'asc' | 'desc'
   providedIn: 'root'
 })
 export class CatalogService {
+  params = inject(CatalogParamsService)
 
   total = signal(0)
 

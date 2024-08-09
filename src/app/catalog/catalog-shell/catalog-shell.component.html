@@ -15,6 +15,8 @@ error
 
 </section>
 
+@if(catalog.getPaginationPages(catalog.total(), catalog.page(), catalog.limit()).length > 1)
+{
 <div style="text-align: center; padding: 4ch var(--gap) var(--gap);">
     <span>📄</span>
 
@@ -23,13 +25,13 @@ error
         @for (item of catalog.getPaginationPages(catalog.total(), catalog.page(), catalog.limit()); track $index) {
         @if(item != -1){
         <li><a [ngClass]="{active: catalog.page() == item, disabled: catalog.page() == item}" class="button small"
-                [routerLink]="'/'" [queryParams]="{page: item}">{{item}}</a></li>}
+                [routerLink]="'/'" [queryParams]="mapQueryParamsWithPage(item)">{{item}}</a></li>}
         @else {
         <separator />
         }
         }
     </ul>
-</div>
+</div>}
 } @else {
 <loading />
 }
