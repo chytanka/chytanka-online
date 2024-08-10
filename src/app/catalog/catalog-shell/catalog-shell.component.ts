@@ -85,7 +85,7 @@ export class CatalogShellComponent {
   protected tapSetMetaTags(): MonoTypeOperatorFunction<any> {
     return tap((v: any) => {
       const metaTitle = `Читанка Онлайн — більше ${this.roundToNearest(v?.total)} тайтлів українською`
-      const metaDesc = `Читати манґу українською онлайн. Не найбільша колекція перекладів манги українською, але все ж... вже більше ${this.roundToNearest(v.total)} тайтлів українською`;
+      const metaDesc = `Читати манґу українською онлайн. Не найбільша колекція перекладів манги українською, але все ж... вже більше ${this.roundToNearest(v?.total)} тайтлів українською`;
 
       this.meta.setTitle(metaTitle)
       this.meta.setDesc(metaDesc)

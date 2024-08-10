@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { TitleService } from '../data-access/title.service';
 import { map, MonoTypeOperatorFunction, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -7,11 +7,13 @@ import { getAverageColor } from '../../shared/utils/average-color';
 import { MangadexHelper } from '../../shared/utils';
 import { isPlatformBrowser } from '@angular/common';
 import { MetaTagsService } from '../../shared/data-access/meta-tags.service';
+import { CatalogService } from '../../catalog/data-access/catalog.service';
 
 @Component({
   selector: 'app-title',
   templateUrl: './title.component.html',
-  styleUrl: './title.component.scss'
+  styleUrl: './title.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TitleComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
@@ -27,6 +29,7 @@ export class TitleComponent implements OnInit, OnDestroy {
 
   document = (isPlatformBrowser(this.platformId)) ? document?.documentElement : undefined;
   titleService: TitleService = inject(TitleService);
+  catalog = inject(CatalogService)
   protected route: ActivatedRoute = inject(ActivatedRoute)
 
   sanitizer = inject(DomSanitizer)
@@ -47,6 +50,8 @@ export class TitleComponent implements OnInit, OnDestroy {
       if (MangadexHelper.isNSFW(v.attributes)) {
         this.meta.setAdult()
       }
+
+      this.catalog.query.set(MangadexHelper.getTitle(v.attributes))
 
     })
   }

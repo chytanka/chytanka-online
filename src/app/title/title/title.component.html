@@ -1,59 +1,63 @@
 @if (title$ | async; as title) {
 
 <div>
-    @if(currentId()){<iframe class="chtnk-frame"
+    @if(currentId()){
+    <iframe class="chtnk-frame"
         [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.github.io/mangadex/'+currentId()+'?lang=uk&vm='+ (MangadexHelper.isLongStrip(title.attributes.tags) ? '3': '1'))"
-        frameborder="0" allowfullscreen title="Chytanka"></iframe>}
+        frameborder="0" allowfullscreen title="Chytanka"></iframe>
+    }
+    <section class="title-desc">
+        <div class="sites">
+            <div>
+                <img class="favicon" [src]="getFavicon('https://mangadex.org')" alt="">
+                <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
+            </div>
+            @if(title.attributes.links?.length > 0){
+            @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track
+            $index) {
 
-    <div class="sites">
-        <div>
-            <img class="favicon" [src]="getFavicon('https://mangadex.org')" alt="">
-            <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
+            @if(MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template; as link) {
+
+
+            <div>
+                <img class="favicon" [src]="getFavicon(link)" alt="">
+                <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{MangadexHelper.getLink(siteId,
+                    '')?.name}}</a>
+            </div>
+            }
+            }}
         </div>
-        @if(title.attributes.links?.length > 0){
-        @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track
-        $index) {
 
-        @if(MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template; as link) {
+        <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
 
+        <p style="display: flex; flex-wrap: wrap; gap: 1ch;">
+            <span [title]="title.attributes.status">{{MangadexHelper.statusMap.get(title.attributes.status)}}</span>
+            <span
+                [title]="title.attributes.contentRating">{{MangadexHelper.contentRatingMap.get(title.attributes.contentRating)}}</span>
+            @for (genre of MangadexHelper.genreTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{genre: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+            }
 
-        <div>
-            <img class="favicon" [src]="getFavicon(link)" alt="">
-            <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{MangadexHelper.getLink(siteId,
-                '')?.name}}</a>
-        </div>
-        }
-        }}
-    </div>
+            @for (genre of MangadexHelper.themeTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{theme: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+            }
 
-    <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
+            @for (genre of MangadexHelper.contentTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{content: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+            }
 
-    <p style="display: flex; flex-wrap: wrap; gap: 1ch;">
-        <span [title]="title.attributes.status">{{MangadexHelper.statusMap.get(title.attributes.status)}}</span>
-        <span
-            [title]="title.attributes.contentRating">{{MangadexHelper.contentRatingMap.get(title.attributes.contentRating)}}</span>
-        @for (genre of MangadexHelper.genreTags(title.attributes.tags); track $index) {
-        <a [routerLink]="['/']" [queryParams]="{genre: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
-        }
-
-        @for (genre of MangadexHelper.themeTags(title.attributes.tags); track $index) {
-        <a [routerLink]="['/']" [queryParams]="{theme: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
-        }
-
-        @for (genre of MangadexHelper.contentTags(title.attributes.tags); track $index) {
-        <a [routerLink]="['/']" [queryParams]="{content: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
-        }
-
-        @for (genre of MangadexHelper.formatTags(title.attributes.tags); track $index) {
-        <a [routerLink]="['/']" [queryParams]="{format: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
-        }
-    </p>
+            @for (genre of MangadexHelper.formatTags(title.attributes.tags); track $index) {
+            <a [routerLink]="['/']" [queryParams]="{format: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
+            }
+        </p>
+    </section>
 </div>
 
 <aside>
     <section class="contents">
         <h2 style="color: var(--shc);">
-            {{MangadexHelper.getTitle(title.attributes)}} від {{MangadexHelper.getAuthor(title.relationships).attributes.name}}
+            {{MangadexHelper.getTitle(title.attributes)}} від
+            {{MangadexHelper.getAuthor(title.relationships).attributes.name}}
         </h2>
 
         @if (episodes$ | async; as episodes) {

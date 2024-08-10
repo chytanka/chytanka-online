@@ -4,7 +4,7 @@
 
     display: grid;
     grid-template-columns: 61.8fr 38.2fr;
-    gap: 2ch 3ch;
+    gap: 2ch 2ch;
     padding: 2ch;
 
     @media (max-width: 800px) {
@@ -20,28 +20,22 @@
     resize: vertical;
     max-height: 80dvh;
     padding-bottom: 1ch;
-    border: 1px solid var(--shc2);
     border-radius: var(--radius);
-    box-shadow: .1ch .1ch var(--shc2),
+    border: 1px solid var(--shc2);
+    box-shadow: .1ch .1ch var(--shc),
         .2ch .2ch var(--shc),
-        .3ch .3ch var(--shc),
-        .4ch .4ch var(--shc),
-        .5ch .5ch var(--shc2);
+        .3ch .3ch var(--shc2);
 
     @media ((orientation: portrait) and (max-aspect-ratio: 1)) or (max-width: 1024px) {
         aspect-ratio: 2/3;
     }
-
-    // @media (max-width: 800px) {
-    //     max-height: 80vh;
-    // }
 }
 
 .contents {
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 1ch;
-    border-radius: .5ch;
+    border-radius: var(--radius);
     border: 1px solid var(--shc2);
     box-shadow: .1ch .1ch var(--shc),
         .2ch .2ch var(--shc),
@@ -53,6 +47,21 @@
     }
 }
 
+img-rotate  {
+    border-radius: var(--radius);
+}
+
+.title-desc {
+    border: 1px solid var(--shc2);
+    box-shadow: .1ch .1ch var(--shc),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc2);
+    background-color: oklch(from var(--surface-avarage) calc(l + .1) c h);
+    border-radius: var(--radius);
+    margin: 1ch 0;
+    padding: 2ch;
+}
+
 .episode-list {
     display: grid;
     gap: 1ch;
@@ -61,7 +70,7 @@
     margin: 0;
     overflow: auto;
     align-content: baseline;
-    
+
     li {
         align-items: center;
         padding: .5ch 1ch;
@@ -84,6 +93,11 @@ aside {
 
     h2 {
         margin: 0;
+    }
+
+    section {
+        overflow: hidden;
+        min-height: 50dvh;
     }
 }
 
