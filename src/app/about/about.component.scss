@@ -1,0 +1,17 @@
+:host {
+    --shc: oklch(from var(--avarage-color, #c3d3e3) 62% c calc(h + 60));
+    --shc2: oklch(from var(--avarage-color, #c3d3e3) 72% c calc(h + 60));
+}
+
+article {
+    max-width: 60ch;
+    margin: 2ch auto;
+    padding: 1ch;
+    border: 1px solid var(--shc2);
+    box-shadow: .1ch .1ch var(--shc),
+        .2ch .2ch var(--shc),
+        .3ch .3ch var(--shc2);
+    background-color: oklch(from var(--surface-avarage) calc(l + .1) c h);
+    border-radius: var(--radius);
+    padding: 2ch;
+}

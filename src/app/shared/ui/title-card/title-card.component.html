@@ -1,8 +1,8 @@
-<img loading="lazy" [routerLink]="['/', item().id]"
+<img loading="lazy" [routerLink]="['/', item().id, MangadexHelper.getAlias(item().attributes)]"
     [src]="catalog.proxy.proxyUrl('https://mangadex.org/covers/'+item().id+'/'+MangadexHelper.getCover(item().relationships).attributes?.fileName+'.512.jpg')"
     alt="Cover {{MangadexHelper.getTitle(item().attributes)}}" (load)="averageColor($event)"
     crossOrigin="anonymous" />
-<a [routerLink]="['/', item().id]" style="line-break: loose;">
+<a [routerLink]="['/', item().id, MangadexHelper.getAlias(item().attributes)]" style="line-break: loose;">
     <h3>
         <span [title]="item().attributes.status">{{MangadexHelper.statusMap.get(item().attributes.status)}}</span>
         <span

@@ -70,6 +70,19 @@ export class MangadexHelper {
         }
     }
 
+    static getAlias(attributes: any): any {
+        if (!attributes) return
+
+        let alias: string = attributes?.title.en ?? '';
+        alias = alias.toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
+
+        return alias;
+    }
+
     static statusMap = new Map<string, string>().set('ongoing', '📝').set('completed', '✅')
     static contentRatingMap = new Map<string, string>().set('safe', '🎈')
         .set('suggestive', '😏')

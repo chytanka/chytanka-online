@@ -9,6 +9,11 @@ export const routes: Routes = [
         component: AboutComponent
     },
     {
+        path: ':id/:alias',
+        loadChildren: () => import('./title/title.module').then(m => m.TitleModule),
+        pathMatch: 'full'
+    },
+    {
         path: ':id',
         loadChildren: () => import('./title/title.module').then(m => m.TitleModule),
         pathMatch: 'full'

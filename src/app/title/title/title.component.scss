@@ -58,7 +58,7 @@ img-rotate  {
         .3ch .3ch var(--shc2);
     background-color: oklch(from var(--surface-avarage) calc(l + .1) c h);
     border-radius: var(--radius);
-    margin: 1ch 0;
+    margin: 2ch 0 0;
     padding: 2ch;
 }
 
