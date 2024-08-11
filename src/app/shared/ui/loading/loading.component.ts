@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'loading',
@@ -31,7 +31,8 @@ import { Component, inject } from '@angular/core';
   to { transform:  rotate(360deg); }
 }
     `
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoadingComponent {
 }

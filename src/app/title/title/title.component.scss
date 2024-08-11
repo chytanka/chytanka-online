@@ -13,22 +13,43 @@
     }
 }
 
-.chtnk-frame {
-    width: 100%;
+.chtnk-frame-wrap {
+    display: grid;
     aspect-ratio: 3/2;
-    overflow: auto;
-    resize: vertical;
-    max-height: 80dvh;
-    padding-bottom: 1ch;
+    position: relative;
     border-radius: var(--radius);
     border: 1px solid var(--shc2);
     box-shadow: .1ch .1ch var(--shc),
         .2ch .2ch var(--shc),
         .3ch .3ch var(--shc2);
 
+    // overflow: auto;
+    // resize: vertical;
+    overflow: hidden;
+    max-height: 80dvh;
+    padding-bottom: 1ch;
+
     @media ((orientation: portrait) and (max-aspect-ratio: 1)) or (max-width: 1024px) {
         aspect-ratio: 2/3;
     }
+
+    loading {
+        position: absolute;
+        inset: 0;
+        width: unset;
+        height: unset;
+        aspect-ratio: unset;
+        grid-area: 1/1;
+        z-index: -1;
+        backdrop-filter: unset;
+    }
+}
+
+.chtnk-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .contents {
@@ -47,7 +68,7 @@
     }
 }
 
-img-rotate  {
+img-rotate {
     border-radius: var(--radius);
 }
 
@@ -97,7 +118,7 @@ aside {
 
     section {
         overflow: hidden;
-        min-height: 50dvh;
+        min-height: 50vh;
     }
 }
 
