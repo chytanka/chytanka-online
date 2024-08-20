@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, computed, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { TitleService } from '../data-access/title.service';
 import { map, MonoTypeOperatorFunction, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { getAverageColor } from '../../shared/utils/average-color';
 import { MangadexHelper } from '../../shared/utils';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { MetaTagsService } from '../../shared/data-access/meta-tags.service';
 import { CatalogService } from '../../catalog/data-access/catalog.service';
 
@@ -15,15 +15,76 @@ import { CatalogService } from '../../catalog/data-access/catalog.service';
   styleUrl: './title.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TitleComponent implements OnInit, OnDestroy {
+export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
+  ngAfterViewInit(): void {
+    this.initChtnkFrameEvents()
+
+  }
+
   ngOnDestroy(): void {
     this.meta.removeAdult()
   }
+
   ngOnInit(): void {
     this.document = (isPlatformBrowser(this.platformId)) ? document?.documentElement : undefined;
   }
+
   Object = Object;
   MangadexHelper = MangadexHelper
+
+  // @ViewChild('#chtnkFrame', { static: true }) chtnkFrameRef!: ElementRef<HTMLIFrameElement>;
+
+  @ViewChild('chtnkFrame') chtnkFrameRef!: ElementRef<HTMLIFrameElement>;
+
+  eventHandler = new Map<string, Function>()
+    .set('changepage', this.onchangepage)
+    .set("nsfwchoice", this.onnsfwchoice)
+    .set("listrequest", this.onlistrequest)
+
+  initChtnkFrameEvents() {
+
+    if (isPlatformServer(this.platformId)) return
+
+    window.addEventListener('message', (event) => {
+      if (![...this.eventHandler.keys()].includes(event.data.type)) return;
+
+      const msg = event.data.message
+      const method = this.eventHandler.get(event.data.type)
+
+      if (!msg || !method) return;
+
+      method(msg, this)
+
+    }, false);
+
+
+  }
+
+  private onlistrequest(msg: any, that: TitleComponent) {
+    if (msg.id) {
+      that.saveCurrentIdToStorage(msg.id);
+    }
+
+    const res = {
+      event: 'listresponse',
+      data: that.listResponce
+    };
+
+    that.chtnkFrameRef.nativeElement.contentWindow?.postMessage(res, "*")
+  }
+
+  private onchangepage(msg: any, that: any) {
+    // outTotal.value = msg.total;
+    // outCurrent.value = msg.current.join(', ')
+    // console.log(msg);
+
+  }
+
+  private onnsfwchoice(msg: any, that: any) {
+    console.log("NSFW Choise: ", msg);
+  }
+
+  listResponce = []
 
   platformId = inject(PLATFORM_ID)
 
@@ -59,25 +120,39 @@ export class TitleComponent implements OnInit, OnDestroy {
   episodes$ = this.titleService.getTitleEpisodes(this.route.snapshot.params['id']).pipe(
     tap(v => this.titleService.total.set(v.total)),
     map(res => res.data),
-    tap(v => this.setCurrentId(this.getCurrentId() ??  v[0]?.id))
+    tap(v => this.setCurrentId(this.getCurrentId() ?? v[0]?.id)),
+    tap(v => {
+      this.listResponce = v.map((ep: any) => {
+        return {
+          id: ep.id,
+          site: "mangadex",
+          title: ep.attributes?.title ?? undefined
+        }
+      })
+
+    })
   )
 
-
-  listBlobUrl = '';
-
   getCurrentId() {
+    const titleId = this.route.snapshot.params['id'];
+    const res = (isPlatformBrowser(this.platformId)) ? localStorage.getItem(titleId) : ''
+    console.log(titleId, ':' ,res);
 
-    return (isPlatformBrowser(this.platformId))? localStorage.getItem(this.route.snapshot.params['id']) : ''
+    return res;
   }
 
-  setCurrentId( id: string) {
+  setCurrentId(id: string) {
     this.currentId.set(id);
-    if (isPlatformBrowser(this.platformId))
-      localStorage.setItem(this.route.snapshot.params['id'], id);
+    this.saveCurrentIdToStorage(id);
   }
-  
 
-  currentId = signal(this.getCurrentId())
+  saveCurrentIdToStorage(id: string) {
+    const titleID = this.route.snapshot.params['id'];
+    if (isPlatformBrowser(this.platformId))
+      localStorage.setItem(titleID, id);
+  }
+
+  currentId = signal('')
 
   averageColor(event: Event, element: HTMLElement | undefined) {
     if (!element) return;
@@ -89,26 +164,6 @@ export class TitleComponent implements OnInit, OnDestroy {
 
     element.style.setProperty('--avarage-color', avc)
   }
-
-  // jsonToBlobURL(obj: any) {
-  //   const str = JSON.stringify(obj);
-  //   const bytes = new TextEncoder().encode(str);
-  //   const blob = new Blob([bytes], {
-  //     type: "application/json;charset=utf-8"
-  //   });
-
-  //   return URL.createObjectURL(blob)
-  // }
-
-  // playListUrl(mangadexList: any) {
-  //   const res: any[] = []
-
-  //   mangadexList.forEach((item: any) => {
-  //     res.push(`https://mangadex.org/chapter/${item.id}`)
-  //   });
-
-  //   return this.jsonToBlobURL(res)
-  // }
 
   parseMarkdown(markdown: string): string {
     if (!markdown) return ''

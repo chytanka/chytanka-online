@@ -4,7 +4,7 @@
     <div class="chtnk-frame-wrap">
         <loading/>
         @if(currentId()){
-        <iframe class="chtnk-frame"
+        <iframe #chtnkFrame class="chtnk-frame"
             [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.github.io/mangadex/'+currentId()+'?lang=uk&vm='+ (MangadexHelper.isLongStrip(title.attributes.tags) ? '3': '1'))"
             frameborder="0" allowfullscreen title="Chytanka"></iframe>
         }
