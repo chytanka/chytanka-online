@@ -2,10 +2,10 @@
 
 <div>
     <div class="chtnk-frame-wrap">
-        <loading/>
+        <loading />
         @if(currentId()){
         <iframe #chtnkFrame class="chtnk-frame"
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.github.io/mangadex/'+currentId()+'?lang=uk&vm='+ (MangadexHelper.isLongStrip(title.attributes.tags) ? '3': '1'))"
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('https://chytanka.ink/mangadex/'+currentId()+'?lang=uk&vm='+ (MangadexHelper.isLongStrip(title.attributes.tags) ? '3': '1'))"
             frameborder="0" allowfullscreen title="Chytanka"></iframe>
         }
     </div>
@@ -72,18 +72,23 @@
                     <span title="Том">т.{{episode.attributes.volume}} </span> }
                     @if(episode.attributes.chapter){
                     <span title="Розділ">р.{{episode.attributes.chapter}} </span> }
-                    <span>{{episode?.attributes?.title ?? 'Без назви'}}</span> </a>
+                    <span>{{episode?.attributes?.title != ''? episode?.attributes?.title : 'Без назви'}}</span> </a>
+
+                <div class="scanlation-groups">
+                    @for (group of MangadexHelper.getScanlationGroup(episode.relationships); track $index) {
+                    <a [routerLink]="'/'" [queryParams]="{'group': group.id}">{{group.attributes.name}} </a>
+                    }
+                </div>
 
                 <small> <data [value]="episode.attributes.publishAt">{{episode.attributes.publishAt | date :
                         'mediumDate'}} <br> {{episode.attributes.publishAt | date :
                         'mediumTime'}} </data>
-
-                    @if(MangadexHelper.getScanlationGroup(episode.relationships); as group) {
-                    <a [routerLink]="'/'" [queryParams]="{'group': group.id}">{{group.attributes.name}}</a>
-                    }
-
-
                 </small>
+
+
+
+
+
 
             </li>
             }

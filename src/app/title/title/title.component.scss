@@ -97,11 +97,18 @@ img-rotate {
         padding: .5ch 1ch;
         font-size: small;
         display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 1ch;
+        grid-template-columns: 1fr minmax(auto, 1fr) auto;
+        gap: 1ch 2ch;
 
         &.active {
             background-color: oklch(from var(--surface-avarage) calc(l - .1) c h);
+        }
+
+        .scanlation-groups {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1ch;
+            font-size: small;
         }
     }
 }
@@ -120,6 +127,8 @@ aside {
         overflow: hidden;
         min-height: 50vh;
     }
+
+   
 }
 
 .sites {

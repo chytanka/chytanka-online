@@ -25,7 +25,7 @@ export class MangadexHelper {
     }
 
     static getScanlationGroup(relationships: any[]): any {
-        return relationships?.filter((r: any) => r.type == 'scanlation_group')[0] ?? null
+        return relationships?.filter((r: any) => r.type == 'scanlation_group') ?? []
     }
 
     static filterTags(tags: any, group: string): Array<any> {

@@ -81,7 +81,7 @@ export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private onnsfwchoice(msg: any, that: any) {
-    console.log("NSFW Choise: ", msg);
+    // console.log("NSFW Choise: ", msg);
   }
 
   listResponce = []
@@ -136,7 +136,6 @@ export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
   getCurrentId() {
     const titleId = this.route.snapshot.params['id'];
     const res = (isPlatformBrowser(this.platformId)) ? localStorage.getItem(titleId) : ''
-    console.log(titleId, ':' ,res);
 
     return res;
   }
