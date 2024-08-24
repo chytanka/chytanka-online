@@ -109,11 +109,12 @@ export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
       const t = MangadexHelper.getTitle(v.attributes);
       const author = MangadexHelper.getAuthor(v.relationships).attributes.name;
       const coverSrc = 'https://mangadex.org/covers/'+v.id+'/'+MangadexHelper.getCover(v.relationships).attributes?.fileName+'.512.jpg'
-
+      this.meta.setOg();
+      this.meta.setTwiter()
       this.meta.setTitle(`Читати ${t} від ${author} онлайн в Читанці`)
-      this.meta.setDesc(this.MangadexHelper.desc(v.attributes))
-
+      this.meta.setDesc(MangadexHelper.desc(v.attributes))
       this.meta.setImage(coverSrc, `${t} від ${author}`)
+      this.meta.setOgUrl(`https://chtnk.online/${v.id}/${MangadexHelper.getAlias(v.attributes)}`)
 
       if (MangadexHelper.isNSFW(v.attributes)) {
         this.meta.setAdult()
