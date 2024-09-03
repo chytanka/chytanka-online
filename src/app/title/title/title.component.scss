@@ -137,6 +137,13 @@ aside {
     gap: 1ch;
     margin: 1ch 0;
 
+    img {
+        display: inline-block;
+        align-items: center;
+        aspect-ratio: 1;
+        object-fit: contain;
+    }
+
     div {
         display: flex;
         gap: .5ch;

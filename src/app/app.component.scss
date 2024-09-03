@@ -4,13 +4,20 @@ header {
     padding: 1ch;
     display: grid;
     align-items: center;
-    grid-template-columns: 4ch auto 1fr;
+    grid-template-columns:  auto 1fr;
     gap: 1ch;
     transition: all var(--t) ease-in-out;
-    @media (max-width: 800px) {
-        grid-template-columns: 4ch 1fr;
-    }
+ 
 
+    nav a.logo-link {
+        display: grid;
+        grid-template-columns: 4ch auto;
+        gap: 1ch;
+        align-self: center;
+        @media (max-width: 800px) {
+            grid-template-columns: 4ch;
+        }
+    }
     // background-image: url('/pattern.svg');
     // background-size: auto 200%;
     // background-repeat: repeat-x;
@@ -35,7 +42,7 @@ header {
     margin: 0;
     font-size: 2.5ch;
     line-height: 1;
-    padding-top: .25ch;
+    padding-top: .45ch;
 
     sub, sup {
         position: relative;

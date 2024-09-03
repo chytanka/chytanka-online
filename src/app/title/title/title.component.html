@@ -15,7 +15,8 @@
                 <img class="favicon" [src]="getFavicon('https://mangadex.org')" alt="">
                 <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
             </div>
-            @if(title.attributes.links?.length > 0){
+            @if(Object.keys(title.attributes.links).length > 0){
+                
             @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track
             $index) {
 

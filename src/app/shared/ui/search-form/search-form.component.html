@@ -1,0 +1,6 @@
+<form action="/" (submit)="onSubmit($event)">
+    <input #queryInput class="search" placeholder="Пошук тайтлів" type="search" name="q"
+        (input)="changeQuery(queryInput.value)" [value]="catalog.query()">
+    <button class="button" type="submit">🔎</button>
+    <input type="hidden" name="page" value="1">
+</form>

@@ -18,11 +18,91 @@ export class CatalogService {
   query = signal('');
   tag = signal('')
   group = signal('')
-  order = signal('relevance');
-  orderDirection = signal<OrderDirection>('asc');
+  order = signal('latestUploadedChapter'); // relevance (best match), latestUploadedChapter (letestupdate), title, rating, followedCount, createdAt, year
+  orderDirection = signal<OrderDirection>('desc');
+
+  orderList = [
+    {
+      title: 'Найкраща відповідність ',
+      order: 'relevance',
+      orderDirection: "desc"
+    },
+
+    {
+      title: 'Нові завантаження',
+      order: 'latestUploadedChapter',
+      orderDirection: "desc"
+    },
+    {
+      title: 'Старі завантаження',
+      order: 'latestUploadedChapter',
+      orderDirection: "asc"
+    },
+
+    {
+      title: 'Назва за зростанням',
+      order: 'title',
+      orderDirection: "desc"
+    },
+    {
+      title: 'Назва за спаданням',
+      order: 'title',
+      orderDirection: "asc"
+    },
+
+    {
+      title: 'Найвищий рейтинг',
+      order: 'rating',
+      orderDirection: "desc"
+    },
+    {
+      title: 'Найнижчий рейтинг',
+      order: 'rating',
+      orderDirection: "asc"
+    },
+
+    {
+      title: 'Найбільше підписок',
+      order: 'followedCount',
+      orderDirection: "desc"
+    },
+    {
+      title: 'Найменше підписок',
+      order: 'followedCount',
+      orderDirection: "asc"
+    },
+
+    {
+      title: 'Додано нещодавно',
+      order: 'createdAt',
+      orderDirection: "desc"
+    },
+    {
+      title: 'Додано найдавніше',
+      order: 'createdAt',
+      orderDirection: "asc"
+    },
+
+    {
+      title: 'Рік за зростанням',
+      order: 'year',
+      orderDirection: "desc"
+    },
+    {
+      title: 'Рік за спаданням',
+      order: 'year',
+      orderDirection: "asc"
+    },
+
+    {
+      title: 'Не сортувати',
+      order: '',
+      orderDirection: "desc"
+    }
+  ]
 
   // offset = computed(() => this.page() == 1 ? 0 : this.limit() * (this.page()))
-  offset = computed(() => this.limit() * (this.page() -1))
+  offset = computed(() => this.limit() * (this.page() - 1))
   limit = signal(32)
 
   getPaginationPages(totalItems: number, currentPage: number, limit: number) {
@@ -67,7 +147,7 @@ export class CatalogService {
   ]
 
   getActiveContentRating() {
-    return this.contentRating.filter(v=>v.active).map(v=>`&contentRating[]=${v.value}`).join('');
+    return this.contentRating.filter(v => v.active).map(v => `&contentRating[]=${v.value}`).join('');
   }
 
   getTranslateTitles(lg: string = 'uk'): Observable<any> {
@@ -76,7 +156,7 @@ export class CatalogService {
     const group = this.group() ? `&group=${this.group()}` : ''
 
     const contentRating = this.getActiveContentRating();
-    
+
 
     const url = `https://api.mangadex.org/manga?${query}limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art${contentRating}&availableTranslatedLanguage[]=${lg}&order[${this.order()}]=${this.orderDirection()}&includedTagsMode=AND&excludedTagsMode=OR${includedTags}${group}`;
 
