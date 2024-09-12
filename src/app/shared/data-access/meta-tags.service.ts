@@ -35,7 +35,7 @@ export class MetaTagsService {
   }
 
   setImage(src: string, text: string) {
-    const metaImageHost = `https://chytanka-meta-image.onrender.com`
+    const metaImageHost = `https://metaimg.chtnk.online`
     const imageUrl = `${metaImageHost}/generate-image?imageSrc=${Base64.toBase64(src)}&text=${text}`
     this.meta.updateTag({ name: 'twitter:image:src', content: imageUrl })
     this.meta.updateTag({ property: 'og:image', content: imageUrl })
