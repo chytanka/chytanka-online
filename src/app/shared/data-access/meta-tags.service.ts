@@ -34,9 +34,14 @@ export class MetaTagsService {
     this.meta.addTag({ name: 'rating', content: 'adult' })
   }
 
-  setImage(src: string, text: string) {
+  setImage(src: string, title: string, author: string) {
     const metaImageHost = `https://metaimg.chtnk.online`
-    const imageUrl = `${metaImageHost}/generate-image?imageSrc=${Base64.toBase64(src)}&text=${text}`
+    const jsonparams = JSON.stringify({
+      title:title,
+      author: author,
+      copyright: "mangadex"
+    })
+    const imageUrl = `${metaImageHost}/${Base64.toBase64(src)}/${Base64.toBase64(jsonparams)}.jpg`
     this.meta.updateTag({ name: 'twitter:image:src', content: imageUrl })
     this.meta.updateTag({ property: 'og:image', content: imageUrl })
     this.meta.updateTag({ property: 'og:image:url', content: imageUrl })
@@ -44,7 +49,7 @@ export class MetaTagsService {
     this.meta.updateTag({ property: 'og:image:width', content: '1200' })
     this.meta.updateTag({ property: 'og:image:height', content: '630' })
     this.meta.updateTag({ property: 'og:image:type', content: 'image/png' })
-    this.meta.updateTag({ property: 'og:image:alt', content: text })
+    this.meta.updateTag({ property: 'og:image:alt', content: title })
   }
 
   setTwiter() {

@@ -113,7 +113,7 @@ export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
       this.meta.setTwiter()
       this.meta.setTitle(`Читати ${t} від ${author} онлайн в Читанці`)
       this.meta.setDesc(MangadexHelper.desc(v.attributes))
-      this.meta.setImage(coverSrc, `${t} від ${author}`)
+      this.meta.setImage(coverSrc, t, author)
       this.meta.setOgUrl(`https://chtnk.online/${v.id}/${MangadexHelper.getAlias(v.attributes)}`)
 
       if (MangadexHelper.isNSFW(v.attributes)) {
