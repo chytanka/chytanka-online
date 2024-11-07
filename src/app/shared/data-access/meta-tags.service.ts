@@ -35,7 +35,7 @@ export class MetaTagsService {
   }
 
   setImage(src: string, title: string, author: string) {
-    const metaImageHost = `https://metaimg.chtnk.online`
+    const metaImageHost = `https://si.chytanka.ink`
     const jsonparams = JSON.stringify({
       title:title,
       author: author,
