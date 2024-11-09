@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Base64 } from '../utils/base64';
 
-export const PROXY = `https://proxy-seven-xi.vercel.app`
+export const PROXY = `https://proxy.chytanka.ink`
 
 @Injectable({
   providedIn: 'root'
