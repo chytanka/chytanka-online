@@ -26,7 +26,7 @@ export class CatalogShellComponent {
 
   protected route: ActivatedRoute = inject(ActivatedRoute)
 
-  mapQueryParamsWithPage(page: number) {
+  mapQueryParamsWithPage(page: number | number[]) {
     if(this.queryParams() == null) return;
     const res: any = {};
     this.queryParams()?.keys.forEach(key => {

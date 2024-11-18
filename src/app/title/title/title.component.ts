@@ -18,7 +18,6 @@ import { CatalogService } from '../../catalog/data-access/catalog.service';
 export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.initChtnkFrameEvents()
-
   }
 
   ngOnDestroy(): void {
@@ -31,8 +30,6 @@ export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
 
   Object = Object;
   MangadexHelper = MangadexHelper
-
-  // @ViewChild('#chtnkFrame', { static: true }) chtnkFrameRef!: ElementRef<HTMLIFrameElement>;
 
   @ViewChild('chtnkFrame') chtnkFrameRef!: ElementRef<HTMLIFrameElement>;
 
@@ -98,8 +95,22 @@ export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
 
   meta = inject(MetaTagsService)
 
+  moreTitles: any[] = [];
+
   title$ = this.titleService.getTitle(this.route.snapshot.params['id']).pipe(
     map(res => res.data),
+    tap(data => {
+      this.moreTitles = []
+      const mangas = data.relationships.filter((r: any) => r.type == 'manga');
+      const ids: any[] = mangas.map((m: any) => m.id);
+      if (ids.length > 0) {
+        this.catalog.getByIds(ids).subscribe(data => {
+          this.moreTitles = data.data
+        })
+      }
+
+    }),
+
     this.tapSetMetaTags()
   )
 
@@ -108,7 +119,7 @@ export class TitleComponent implements OnInit, OnDestroy, AfterViewInit {
 
       const t = MangadexHelper.getTitle(v.attributes);
       const author = MangadexHelper.getAuthor(v.relationships).attributes.name;
-      const coverSrc = 'https://mangadex.org/covers/'+v.id+'/'+MangadexHelper.getCover(v.relationships).attributes?.fileName+'.512.jpg'
+      const coverSrc = 'https://mangadex.org/covers/' + v.id + '/' + MangadexHelper.getCover(v.relationships).attributes?.fileName + '.512.jpg'
       this.meta.setOg();
       this.meta.setTwiter()
       this.meta.setTitle(`Читати ${t} від ${author} онлайн в Читанці`)

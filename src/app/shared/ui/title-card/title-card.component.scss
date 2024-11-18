@@ -74,13 +74,19 @@ h3 {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+    word-break: break-word;
 }
-
-img {
-    aspect-ratio: 2/3;
+.img-wrap {
+    aspect-ratio: 257 / 364;
     object-fit: cover;
     width: 100%;
+    position: relative;
     grid-area: 1 / 1;
+}
+img {
+    user-select: none;
+    pointer-events: none;
+    object-fit: cover;
 }
 
 :host.nsfw {
@@ -91,17 +97,23 @@ img {
 
 @supports (animation-timeline: view()) {
     :host {
-        // animation: scale both steps(12, end), scale both steps(12, end) reverse;
-        animation: scale both ease-in-out, scale both ease-in-out reverse;
+        animation: shrink-top both ease-in-out, shrink-bottom both ease-in-out reverse;
         animation-timeline: view(block);
-        // animation-range: entry 50%, exit 50%;
         animation-range: entry, exit;
     }
 
-    @keyframes scale {
+    @keyframes shrink-top {
         0% {
             --item-scale: .5;
-            --item-angle: 90deg;
+            --item-angle: -60deg;
+            transform-origin: top;
+        }
+    }
+    @keyframes shrink-bottom {
+        0% {
+            --item-scale: .5;
+            --item-angle: 60deg;
+            transform-origin: bottom;
         }
     }
 }

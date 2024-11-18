@@ -1,8 +1,10 @@
-@if (error$ | async) {
-error
-}
+@if (error$ | async) {error}
 
-@if (list$ | async; as list) { @if(!(loading$ | async)){
+@if(loading$ | async ){
+<loading /> }
+
+@if (list$ | async; as list) {
+@if (!(loading$ | async)) {
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 1ch; align-items: center;">
     <h2>🗂️ Знайдено {{catalog.total()}} тайтлів з 🇺🇦 перекладом</h2>
     <button disabled class="button" title="Фільтр">🎛️</button>
@@ -15,25 +17,13 @@ error
 
 </section>
 
-@if(catalog.getPaginationPages(catalog.total(), catalog.page(), catalog.limit()).length > 1)
-{
-<div style="text-align: center; padding: 4ch var(--gap) var(--gap);">
-    <span>📄</span>
-
-    <ul style="display: inline-flex; margin: 0; font-family: 'Troubleside';
-    padding: 0; gap: 1ch; list-style: none; align-items: center;">
-        @for (item of catalog.getPaginationPages(catalog.total(), catalog.page(), catalog.limit()); track $index) {
-        @if(item != -1){
-        <li><a [ngClass]="{active: catalog.page() == item, disabled: catalog.page() == item}" class="button small"
-                [routerLink]="'/'" [queryParams]="mapQueryParamsWithPage(item)">{{item}}</a></li>}
-        @else {
-        <separator />
-        }
-        }
-    </ul>
-</div>}
-} @else {
-<loading />
-}
-
-}
+@if (catalog.pagination(catalog.total(), catalog.page(), catalog.limit(), 1); as pagination) {
+@if (pagination.length > 1) {
+<nav>
+    @for (item of pagination; track $index) {
+    <a [ngClass]="{disabled: catalog.page() == item}" class="button " [routerLink]="'/'"
+        [queryParams]="mapQueryParamsWithPage(item)">{{item}}</a>
+    }
+</nav>
+}}
+}}

@@ -19,16 +19,48 @@ section {
     }
 }
 
-.button {
-    line-height: 1;
-}
-
-.button.active {
-    display: block;
-    transform: translateY(-1ch);
-}
-
 loading {
     position: relative;
     font-family: 'Troubleside';
+}
+
+nav {
+    padding: 4ch var(--gap) var(--gap);
+    display: flex;
+    margin: 0;
+    // font-family: 'Troubleside';
+    font-family: 'Courier New', Courier, monospace;
+    gap: 0;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+
+    a {
+        padding: 1ch;
+        line-height: 1;
+        cursor: pointer;
+        min-width: 4ch;
+        text-align: center;
+
+        &.disabled {
+            pointer-events: none;
+        }
+    }
+
+    a:nth-child(odd) {
+        margin-right: 1ch;
+        border-top-left-radius: unset;
+        border-bottom-left-radius: unset;
+    }
+
+    a:nth-child(even) {
+        border-top-right-radius: unset;
+        border-bottom-right-radius: unset;
+    }
+}
+
+@starting-style {
+    title-card {
+        opacity: 0;
+    }
 }

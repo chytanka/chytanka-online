@@ -136,6 +136,62 @@ export class CatalogService {
     return paginationPages;
   }
 
+  pagination(totalItems: number, currentPage: number, limit: number, pairLimit: number = 1,
+    flat: boolean = true) {
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return this.getPagination(currentPage, totalPages, pairLimit, flat)
+  }
+
+  getPagination(
+    currentPage: number,
+    totalPages: number,
+    pairLimit: number = 2,
+    flat: boolean = true
+  ): (number | number[])[] {
+
+    const pages: (number | number[])[] = [];
+
+    if (totalPages === 0) return pages; // Якщо сторінок немає, повертаємо порожній масив
+
+    pages.push(1); // Додаємо першу сторінку
+
+    const isCurrentEven = currentPage % 2 == 0;
+
+    //
+    // Додаємо ліві пари
+    const leftPairEnd = isCurrentEven ? currentPage - 1 : currentPage - 2;
+    const leftPairStart = leftPairEnd - pairLimit * 2 + 2;
+
+    for (let i = leftPairStart; i <= leftPairEnd; i += 2) {
+      if (i > 1) pages.push([i - 1, i]); // Додаємо пару, якщо вона більше 1
+    }
+
+    //
+    // Додаємо пару з обраною сторінкою
+    if (currentPage != 1 && currentPage != totalPages) {
+      isCurrentEven
+        ? pages.push([currentPage, currentPage + 1])
+        : pages.push([currentPage - 1, currentPage]);
+    }
+
+    //
+    // Додаємо праві пари
+    const rightPairStart = pages.flat()[pages.flat().length - 1] + 1;
+    const rightPairEnd = rightPairStart + pairLimit * 2;
+
+    for (let i = rightPairStart; i < rightPairEnd; i += 2) {
+      if (i < totalPages) pages.push([i, i + 1]); // Додаємо пару, якщо вона менше totalPages
+    }
+
+    // Додаємо останню сторінку, якщо вона ще не додана
+    if (totalPages !== 1 && !pages.flat().includes(totalPages)) {
+      pages.push(totalPages);
+    }
+
+    return flat ? pages.flat() : pages; // Повертаємо результат у вибраному форматі
+  }
+
   http: HttpClient = inject(HttpClient)
   proxy: ProxyService = inject(ProxyService)
 
@@ -163,11 +219,11 @@ export class CatalogService {
     return this.http.get<any>(this.proxy.proxyUrl(url));
   }
 
-  getOriginalTitles(lg: string = 'uk'): Observable<any> {
-    const query = this.query() ? `title=${this.query()}&` : ''
-    const includedTags = this.tag() ? `&includedTags[]=${this.tag()}` : ''
+  getByIds(ids: string[], lg: string = 'uk'): Observable<any> {
+    const qIds = ids.map(id => `ids[]=${id}`)
+    const contentRating = this.getActiveContentRating();
 
-    const url = `https://api.mangadex.org/manga?${query}limit=${this.limit()}&offset=${this.offset()}&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&originalLanguage[]=${lg}&order[${this.order()}]=${this.orderDirection()}&includedTagsMode=AND&excludedTagsMode=OR${includedTags}`;
+    const url = `https://api.mangadex.org/manga?${qIds.join('&')}&availableTranslatedLanguage[]=${lg}&includes[]=cover_art${contentRating}`;
 
     return this.http.get<any>(this.proxy.proxyUrl(url));
   }

@@ -10,29 +10,6 @@
         }
     </div>
     <section class="title-desc">
-        <div class="sites">
-            <div>
-                <img class="favicon" [src]="getFavicon('https://mangadex.org')" alt="">
-                <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
-            </div>
-            @if(Object.keys(title.attributes.links).length > 0){
-                
-            @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track
-            $index) {
-
-            @if(MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template; as link) {
-
-
-            <div>
-                <img class="favicon" [src]="getFavicon(link)" alt="">
-                <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{MangadexHelper.getLink(siteId,
-                    '')?.name}}</a>
-            </div>
-            }
-            }}
-        </div>
-
-        <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
 
         <p style="display: flex; flex-wrap: wrap; gap: 1ch;">
             <span [title]="title.attributes.status">{{MangadexHelper.statusMap.get(title.attributes.status)}}</span>
@@ -54,7 +31,39 @@
             <a [routerLink]="['/']" [queryParams]="{format: genre.id}">{{genre.names.uk ?? genre.names.en}}</a>
             }
         </p>
+
+        <div [innerHTML]="parseMarkdown(MangadexHelper.desc(title.attributes))"></div>
+
+        <div class="sites">
+            <div>
+                <img class="favicon" [src]="getFavicon('https://mangadex.org')" alt="">
+                <a href="//mangadex.org/title/{{title.id}}" target="_blank" rel="noopener noreferrer">MangaDex</a>
+            </div>
+            @if(Object.keys(title.attributes.links).length > 0){
+
+            @for(siteId of Object.getOwnPropertyNames(title.attributes.links); track
+            $index) {
+
+            @if(MangadexHelper.getLink(siteId, title.attributes.links[siteId] )?.template; as link) {
+
+
+            <div>
+                <img class="favicon" [src]="getFavicon(link)" alt="">
+                <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{MangadexHelper.getLink(siteId,
+                    '')?.name}}</a>
+            </div>
+            }
+            }}
+        </div>
+
+
     </section>
+    <section class="more-titles" style="margin-top: 2ch;">
+        @for (item of moreTitles; track $index) {
+        <title-card [item]="item" />
+        }
+    </section>
+
 </div>
 
 <aside>

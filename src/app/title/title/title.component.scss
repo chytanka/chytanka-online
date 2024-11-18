@@ -15,22 +15,19 @@
 
 .chtnk-frame-wrap {
     display: grid;
-    aspect-ratio: 3/2;
+    aspect-ratio: 253/182;
     position: relative;
     border-radius: var(--radius);
-    border: 1px solid var(--shc2);
+    border: 2px solid var(--avarage-color);
     box-shadow: .1ch .1ch var(--shc),
         .2ch .2ch var(--shc),
         .3ch .3ch var(--shc2);
-
-    // overflow: auto;
-    // resize: vertical;
     overflow: hidden;
     max-height: 80dvh;
     padding-bottom: 1ch;
 
     @media ((orientation: portrait) and (max-aspect-ratio: 1)) or (max-width: 1024px) {
-        aspect-ratio: 2/3;
+        aspect-ratio: 257 / 364;
     }
 
     loading {
@@ -57,7 +54,7 @@
     grid-template-rows: auto 1fr;
     gap: 1ch;
     border-radius: var(--radius);
-    border: 1px solid var(--shc2);
+    border: 2px solid var(--avarage-color);
     box-shadow: .1ch .1ch var(--shc),
         .2ch .2ch var(--shc),
         .3ch .3ch var(--shc2);
@@ -73,7 +70,7 @@ img-rotate {
 }
 
 .title-desc {
-    border: 1px solid var(--shc2);
+    border: 1px solid var(--avarage-color);
     box-shadow: .1ch .1ch var(--shc),
         .2ch .2ch var(--shc),
         .3ch .3ch var(--shc2);
@@ -81,6 +78,20 @@ img-rotate {
     border-radius: var(--radius);
     margin: 2ch 0 0;
     padding: 2ch;
+}
+
+@supports (animation-timeline: view()) {
+    .title-desc {
+        animation: opacity both ease-in-out;
+        animation-timeline: view(block);
+        animation-range: entry, exit;
+    }
+
+    @keyframes opacity {
+        0% {
+            opacity: .25;
+        }
+    }
 }
 
 .episode-list {
@@ -128,7 +139,7 @@ aside {
         min-height: 50vh;
     }
 
-   
+
 }
 
 .sites {
@@ -155,4 +166,11 @@ aside {
     display: inline-block;
     width: 1lh;
     aspect-ratio: 1;
+}
+
+.more-titles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--min-card-width), 1fr));
+    gap: 2ch;
+    perspective: 4000px;
 }
