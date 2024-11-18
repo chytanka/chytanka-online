@@ -60,7 +60,16 @@
     </section>
     <section class="more-titles" style="margin-top: 2ch;">
         @for (item of moreTitles; track $index) {
-        <title-card [item]="item" />
+        <!-- <title-card [item]="item" /> -->
+        <title-card 
+        [cover]="catalog.proxy.proxyUrl('https://mangadex.org/covers/'+item.id+'/'+MangadexHelper.getCover(item.relationships).attributes?.fileName+'.512.jpg')"
+        [title]="MangadexHelper.getTitle(item.attributes)"
+        [contentRating]="MangadexHelper.contentRatingMap.get(item.attributes.contentRating)??''"
+        [status]="MangadexHelper.statusMap.get(item.attributes.status)??''"
+        [nsfw]="MangadexHelper.isNSFW(item?.attributes)"
+        alt="Cover {{MangadexHelper.getTitle(item.attributes)}}"
+        [link]="['/', item.id, MangadexHelper.getAlias(item.attributes)]"
+    />
         }
     </section>
 

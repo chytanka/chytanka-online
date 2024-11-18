@@ -8,10 +8,20 @@ import { CatalogService } from '../../../catalog/data-access/catalog.service';
   styleUrl: './title-card.component.scss'
 })
 export class TitleCardComponent {
-  item = input.required<any>();
 
-  @HostBinding('class.nsfw') get nsfw() : boolean {
-    return MangadexHelper.isNSFW(this.item()?.attributes)
+  cover = input<string>('#')
+  nsfw = input<boolean>(false)
+  link = input<string[]>([])
+  alt = input<string>('')
+  title = input<string>('')
+  contentRating = input<string>('')
+  status = input<string>('')
+
+  // item = input.required<any>();
+
+  @HostBinding('class.nsfw') get isnsfw() : boolean {
+    return this.nsfw()
+    // return MangadexHelper.isNSFW(this.item()?.attributes)
   }
   
 

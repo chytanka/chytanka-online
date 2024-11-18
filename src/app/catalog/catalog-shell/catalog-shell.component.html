@@ -1,7 +1,19 @@
 @if (error$ | async) {error}
 
 @if(loading$ | async ){
-<loading /> }
+<div style="display: grid; grid-template-columns: 1fr auto; gap: 1ch; align-items: center;">
+    <h2>⌛ Завантажуємо скисок тайтлів з 🇺🇦 перекладом</h2>
+</div>
+<section>
+    <title-card [cover]="'/no-image.svg'" [title]="'Терпіння-сенсей і мистецтво очікування'" [status]="'⌛'" />
+    <title-card [cover]="'/no-image.svg'" [title]="'Завантажується довше, ніж твій сейв у Skyrim'" [status]="'⌛'" />
+    <title-card [cover]="'/no-image.svg'" [title]="'Щоденник головного героя, що застряг у лоадінгу'" [status]="'⌛'" />
+    <title-card [cover]="'/no-image.svg'" [title]="'Буферизація-чан: Пригоди невидимої сторінки'" [status]="'⌛'" />
+    <title-card [cover]="'/no-image.svg'" [title]="'Наруто, але повільніше'" [status]="'⌛'" />
+    <title-card [cover]="'/no-image.svg'" [title]="'Я перевтілився у спіраль завантаження'" [status]="'⌛'" />
+</section>
+<!-- <loading />  -->
+}
 
 @if (list$ | async; as list) {
 @if (!(loading$ | async)) {
@@ -12,7 +24,13 @@
 
 <section>
     @for (item of list.data; track $index) {
-    <title-card [item]="item" />
+    <title-card
+        [cover]="catalog.proxy.proxyUrl('https://mangadex.org/covers/'+item.id+'/'+MangadexHelper.getCover(item.relationships).attributes?.fileName+'.512.jpg')"
+        [title]="MangadexHelper.getTitle(item.attributes)"
+        [contentRating]="MangadexHelper.contentRatingMap.get(item.attributes.contentRating)??''"
+        [status]="MangadexHelper.statusMap.get(item.attributes.status)??''"
+        [nsfw]="MangadexHelper.isNSFW(item?.attributes)" alt="Cover {{MangadexHelper.getTitle(item.attributes)}}"
+        [link]="['/', item.id, MangadexHelper.getAlias(item.attributes)]" />
     }
 
 </section>

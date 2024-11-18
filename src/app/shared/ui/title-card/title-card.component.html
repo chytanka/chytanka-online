@@ -1,4 +1,4 @@
-<a class="img-wrap" [routerLink]="['/', item().id, MangadexHelper.getAlias(item().attributes)]">
+<!-- <a class="img-wrap" [routerLink]="['/', item().id, MangadexHelper.getAlias(item().attributes)]">
     <img placeholder="/no-image.svg" loading="lazy"
     [placeholderConfig]="{blur: false}"
          fill
@@ -12,5 +12,17 @@
         <span
             [title]="item().attributes.contentRating">{{MangadexHelper.contentRatingMap.get(item().attributes.contentRating)}}</span>
         {{MangadexHelper.getTitle(item().attributes)}}
+    </h3>
+</a> -->
+
+<a class="img-wrap" [routerLink]="link()">
+    <img placeholder="/no-image.svg" loading="lazy" [placeholderConfig]="{blur: false}" fill [ngSrc]="cover()"
+        [alt]="alt()" (load)="averageColor($event)" crossOrigin="anonymous" />
+</a>
+<a [routerLink]="link()" style="line-break: loose;">
+    <h3>
+        <span>{{status()}}</span>
+        <span>{{contentRating()}}</span>
+        {{title()}}
     </h3>
 </a>
